@@ -406,15 +406,26 @@ function setupCart() {
   // builds the shipping meter at the top of the cart
   const buildFreeShippingMeter = cart => {
     let text, wrapperClass
+
     if (freeShippingRemaining_2(cart) > 0) {
+      // '<span class="cart_count">' + cart.item_count  + '</span><span class="item-count">items in bag</span><p class="cart-shipping-text"><span>You are</span><span class="remaining-money">' + formatMoney(freeShippingRemaining_2(cart) * 100) + '</span><span> away from free U.S. shipping</span></p>'
       text = p(".cart-shipping-text", [
+        span(".cart_count", cart.item_count),
+        span(".item-count", " items in bag | "),
         span("You are "),
         span(".remaining-money", formatMoney(freeShippingRemaining_2(cart) * 100)),
         span(" away from free U.S. shipping")
       ])
+      
       wrapperClass = ".non-free-shipping-bar"
     } else {
-      text = freeShippingOkText
+      // text = freeShippingOkText
+      text = text = p(".cart-shipping-text", [
+        span(".cart_count", cart.item_count),
+        span(".item-count", " items in bag | "),
+        span("You have free U.S. shipping")
+      ])
+
       wrapperClass = ".free-shipping-bar"
     }
 
@@ -548,10 +559,11 @@ function setupCart() {
   const buildCartHeader = cart => div(".cart-header", [
     cartIconClose,
     cartLogo,
-    div([
-      span(".cart_count", cart.item_count),
-      span(".item-count", " items added to your bag")
-    ]),
+    // div([
+    //   span(".cart_count", cart.item_count),
+    //   span(".item-count", " items in bag | "),
+    //   buildFreeShippingMeter(cart)
+    // ]),
     buildFreeShippingMeter(cart)
   ]) // .cart-header
 

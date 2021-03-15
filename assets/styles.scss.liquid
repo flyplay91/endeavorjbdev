@@ -1733,11 +1733,10 @@ a.tos_icon,
   font-size: larger;
 }
 .free-shipping-rule {
-  font-size: 16px;
-  padding: 0 50px;
+  font-size: 11px;
+  padding: 0 20px;
   @include respond-to('medium'){
-    padding: 0 20px;
-    font-size: 14px;
+    font-size: 10px;
   }
   .progress {
     height: 14px;
@@ -11480,9 +11479,9 @@ h1 {
     position: relative;
     bottom: 20px;
   }
-  .non-free-shipping-bar p {
+  /*.non-free-shipping-bar p {
     font-size: 12px !important;
-  }
+  }*/
   .collection-template-section #collection-descriptor {
     margin-bottom: -15px !important;
   }
@@ -11860,7 +11859,10 @@ button[title="Out of Stock"] {
   margin: 0 0 15px;
   font-style: normal;
   line-height: 1.6em;
-  font-size: 12px;
+  font-size: 11px;
+   @include respond-to('medium'){
+   		font-size: 9px;
+   }
 }
   
 .animate-in {
