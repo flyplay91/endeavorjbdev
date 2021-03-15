@@ -1,0 +1,183 @@
+<a name="pagecontent" id="pagecontent"></a>
+
+<header class="account-header clearfix">
+  <div class="eight columns account-header-title">
+    <h1><a href="/account">{{ 'customer.account.details' | t }}</a></h1>
+  </div>
+  <div class="eight columns account-header-logout">
+    <span>{{ 'layout.customer.log_out' | t | customer_logout_link }}</span>
+  </div>
+</header>
+<div class="feature_divider"></div>
+
+<div class="section clearfix">
+  <div class="sixteen columns order-on-mobile">
+    <div class="new-order-layout">
+      <div class="order__details">
+      <div class="order__detail">
+        <div class="order-details__info-wrapper">
+          <div class="order-details__info">
+            <h1 class="order__title">{{ 'customer.order.title' | t: name: order.name }}</h1>
+            <span class="order__date">{{ 'customer.order.date' | t: date: order.created_at | date: "%B %d, %Y %I:%M%p" }}</span>
+          </div>
+
+          {% if order.cancelled %}
+            <div class="order-details__cancelled">
+              <p class="cancelled__label">CANCELLED</p>
+              <span class="order__date">On {{ order.cancelled_at | date: '%B %e, %Y - %l:%M %P' }}</span>
+              <span class="order__status">Reason: {{ order.cancel_reason | capitalize }}</span>
+            </div>
+          {% endif %}
+        </div>
+
+        <table class="order-details__table desktop--only--table">
+          <thead>
+            <tr>
+              <th class="table-title">PRODUCT</th>
+              <th>SKU</th>
+              <th>PRICE</th>
+              <th class="table-center"><span>QTY</span></th>
+              <th class="table-right">TOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for line_item in order.line_items %}
+              <tr id="{{ line_item.key }}" class="responsive-table__row" >
+                <td class="table-title" data-label="Title">{{ line_item.title }}</td>
+                <td data-label="Sku">{{ line_item.sku }}</td>
+                <td data-label="Price">{{ line_item.price | money_without_trailing_zeros }}</td>
+                <td class="table-center" data-label="Quantity">{{ line_item.quantity }}</td>
+                <td class="table-right" data-label="Total">{{ line_item.quantity | times: line_item.price | money_without_trailing_zeros }}</td>
+              </tr>
+            {% endfor %}
+            <tr class="responsive-table__row money-details">
+              <td colspan="4" class="small--hide">Subtotal</td>
+              <td class="table-right" data-label="Subtotal">{{ order.subtotal_price | money_without_trailing_zeros }}</td>
+            </tr>
+
+            {% for discount in order.discounts %}
+              <tr class="order_summary discount">
+                <td colspan="4" class="small--hide">{{ discount.code }} Discount</td>
+                <td class="table-right" data-label="Discount">{{ discount.savings | money_without_trailing_zeros }}</td>
+              </tr>
+            {% endfor %}
+
+            {% for shipping_method in order.shipping_methods %}
+              <tr>
+                <td colspan="4" class="small--hide">Shipping ({{ shipping_method.title }})</td>
+                <td class="table-right" data-label="Sipping ({{ shipping_method.title }})">{{ shipping_method.price | money_without_trailing_zeros }}</td>
+              </tr>
+            {% endfor %}
+
+            {% for tax_line in order.tax_lines %}
+              <tr>
+                <td colspan="4" class="small--hide">Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)</td>
+                <td class="table-right" data-label="Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)">{{ tax_line.price | money }}</td>
+              </tr>
+            {% endfor %}
+
+            <tr>
+              <td colspan="4" class="small--hide"><strong>{{ 'customer.order.total' | t }}</strong></td>
+              <td class="table-right" data-label="{{ 'customer.order.total' | t }}"><strong>{{ order.total_price | money }}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="order-details__table order-details__table--mobile mobile--only--table">
+          <thead>
+            <tr>
+              <th class="table-title">PRODUCT</th>
+              <th class="table-center">PRICE</th>
+              <th class="table-center"><span>QTY</span></th>
+              <th class="table-right">TOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for line_item in order.line_items %}
+              <tr id="{{ line_item.key }}" class="responsive-table__row" >
+                <td class="table-title" data-label="Title">
+                  {{ line_item.product.title }}
+                  {% for option in line_item.options_with_values %}
+                    <br />
+                    {{ option.value }}
+                  {% endfor %}
+                </td>
+                <td class="table-center" data-label="Price">{{ line_item.price | money_without_trailing_zeros }}</td>
+                <td class="table-center" data-label="Quantity">{{ line_item.quantity }}</td>
+                <td class="table-right" data-label="Total">{{ line_item.quantity | times: line_item.price | money_without_trailing_zeros }}</td>
+              </tr>
+            {% endfor %}
+            <tr class="responsive-table__row money-details">
+              <td colspan="3" class="small--hide">Subtotal</td>
+              <td class="table-right" data-label="Subtotal">{{ order.subtotal_price | money_without_trailing_zeros }}</td>
+            </tr>
+
+            {% for discount in order.discounts %}
+              <tr class="order_summary discount">
+                <td colspan="3" class="small--hide">{{ discount.code }} Discount</td>
+                <td class="table-right" data-label="Discount">{{ discount.savings | money_without_trailing_zeros }}</td>
+              </tr>
+            {% endfor %}
+
+            {% for shipping_method in order.shipping_methods %}
+              <tr>
+                <td colspan="3" class="small--hide">Shipping ({{ shipping_method.title }})</td>
+                <td class="table-right" data-label="Sipping ({{ shipping_method.title }})">{{ shipping_method.price | money_without_trailing_zeros }}</td>
+              </tr>
+            {% endfor %}
+
+            {% for tax_line in order.tax_lines %}
+              <tr>
+                <td colspan="3" class="small--hide">Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)</td>
+                <td class="table-right" data-label="Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)">{{ tax_line.price | money }}</td>
+              </tr>
+            {% endfor %}
+
+            <tr>
+              <td colspan="3" class="small--hide"><strong>{{ 'customer.order.total' | t }}</strong></td>
+              <td class="table-right" data-label="{{ 'customer.order.total' | t }}"><strong>{{ order.total_price | money }}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="order-details__addresses">
+        <div class="order-details__address">
+          <h3 class="order-details__title">Billing Address</h3>
+
+          <div class="order-details__address-wrapper">
+            <p class="order__status">Payment status: <span>{{ order.financial_status_label }}</span></p>
+
+            <div class="order-details__address-view">
+              {% assign billingAddress = order.billing_address %}
+              <p>{{ billingAddress.name }}</p>
+              <p>{{ billingAddress.address1 }}</p>
+              <p>{{ billingAddress.city }}</p>
+              <p>{{ billingAddress.province }}</p>
+              <p>{{ billingAddress.zip }}</p>
+              <p>{{ billingAddress.country }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-details__address">
+          <h3 class="order-details__title">Shipping Address</h3>
+
+          <div class="order-details__address-wrapper">
+            <p class="order__status">Fulfillment status: <span>{{ order.fulfillment_status_label }}</span></p>
+
+            <div class="order-details__address-view">
+              {% assign shippingAddress = order.shipping_address %}
+              <p>{{ shippingAddress.name }}</p>
+              <p>{{ shippingAddress.address1 }}</p>
+              <p>{{ shippingAddress.city }}</p>
+              <p>{{ shippingAddress.province }}</p>
+              <p>{{ shippingAddress.zip }}</p>
+              <p>{{ shippingAddress.country }}</p>
+            </div>
+          </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>

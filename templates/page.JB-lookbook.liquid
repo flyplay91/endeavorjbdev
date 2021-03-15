@@ -1,0 +1,184 @@
+<div class="sixteen columns page clearfix">
+  <h1 id="lookbook-title">
+    {{ page.title }}
+  </h1>
+  <div>
+    {% section 'lookbook-banner' %}
+  </div>
+    {% section 'lookbook-text' %}
+<!--   <div class="feature_divider"></div> -->
+
+  <div>
+    {% section 'lookbook' %}
+  </div>
+</div>
+
+<style>
+  
+  figure{
+    width:100%;
+  }
+  .col-xs-12 {
+    position: relative;
+    min-height: 1px;
+    padding-left: 15px;
+    padding-right: 15px;
+    float: left;
+    width: 100%;
+  }
+  
+  
+  .col-sm-3, .col-sm-4, .col-sm-6, .col-sm-8, .col-sm-9, .col-sm-12, 
+  .col-md-3, .col-md-4, .col-md-6, .col-md-8, .col-md-9, .col-md-12 {
+    position: relative;
+    min-height: 1px;
+    float: left;
+  }
+  
+  div.lookbook-main-text {
+    font-size: {{ settings.lookbook_main_text_font_size }}px;
+    color: {{ settings.lookbook_main_text_color }};
+    padding: 5px;
+  }
+  
+  div.lookbook-sub-text {
+    font-size: {{ settings.lookbook_sub_text_font_size }}px;
+    color: {{ settings.lookbook_sub_text_color }};
+    padding: 5px;
+  }
+  
+  .sixteen.columns {
+    position: relative;
+    top: 84px;
+  }
+  
+  #lookbook-title {
+    margin-top: 0;
+  }
+  
+  .newsletter_section {
+    padding: 15px 0;
+  }
+   
+  /* Media Queries   */
+  
+  @media (max-width: 414px){
+    .col-sm-3, .col-sm-4, .col-sm-6, .col-sm-8, .col-sm-9, .col-sm-12, 
+    .col-md-3, .col-md-4, .col-md-6, .col-md-8, .col-md-9, .col-md-12 {
+      margin-bottom: 3px;
+      padding: 0;
+    }
+    .columns {
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+  }
+  
+  @media (min-width:768px){
+    .col-sm-3 {
+      width: 25%;
+    }
+    
+    .col-sm-4 {
+      width: 33.33333333%;
+    }
+    
+    .col-sm-6 {
+      width: 50%;
+    }
+    
+    .col-sm-8 {
+      width:66.66666667%;
+    }
+    
+    .col-sm-9 {
+      width: 75%;
+    }
+    
+    .col-sm-12 {
+      width: 100%;
+    }
+    
+    .newsletter_section {
+      padding: 0;
+    }
+    
+  }
+  
+  
+  @media (min-width: 799px) {
+    .sixteen.columns {
+      position: static;
+      top: 0;
+    }
+  
+    #lookbook-title {
+      margin-top: 20px;
+    }
+    
+    div.lookbook-main-text {
+      font-size: {{ settings.lookbook_main_text_font_size }}px;
+      color: {{ settings.lookbook_main_text_color }};
+      padding: {{ settings.lookbook_main_text_vertical_paddings }}px {{ settings.lookbook_main_text_horizontal_paddings }}px;
+    }
+  
+    div.lookbook-sub-text {
+      font-size: {{ settings.lookbook_sub_text_font_size }}px;
+      color: {{ settings.lookbook_sub_text_color }};
+      padding: {{ settings.lookbook_sub_text_vertical_paddings }}px {{ settings.lookbook_sub_text_horizontal_paddings }}px;
+    }
+    
+    .col-sm-3, .col-sm-4, .col-sm-6, .col-sm-8, .col-sm-9, .col-sm-12, 
+    .col-md-3, .col-md-4, .col-md-6, .col-md-8, .col-md-9, .col-md-12 {
+      padding: {{ settings.vertical_paddings }}px {{ settings.horizontal_paddings }}px !important;
+    }
+  }
+  
+  @media (min-width:1600px) {
+    .col-md-3 {
+      width: 25%;
+    }
+    
+    .col-md-4 {
+      width: 33.33333333%;
+    }
+    
+    .col-md-6 {
+      width: 50%;
+    }
+    
+    .col-md-8 {
+      width: 66.66666667%;
+    }
+    
+    .col-md-9 {
+      width: 75%;
+    }
+    
+    .col-md-12 {
+      width: 100%;
+    }
+  }
+
+</style>
+
+<script>
+  (function() {
+    if(window.innerWidth <= 798){
+      let container = document.querySelector(".container.main.content.row");
+      container.className = container.className.replace(/\bcontainer\b/g, "");
+    }
+
+})();
+  
+  window.onresize = function() {
+    let container = document.querySelector(".main.content.row");
+    if(window.innerWidth > 798 && !container.classList.contains('container')) {
+      container.classList.add('container');
+    }
+    
+    if(window.innerWidth <= 798 && container.classList.contains('container')) {
+      container.classList.remove('container');
+    }
+  }
+</script>

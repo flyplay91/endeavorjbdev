@@ -1,0 +1,29 @@
+{% if collection and collection.all_products_count > 1 %}
+  {% assign col = collection.handle %}
+{% else %}
+  {% assign col = product.collections.last.handle %}
+{% endif %}
+
+{% for tag in product.tags %}
+  {% if tag contains 'meta-related-collection-' %}
+    {% assign related_collection_handle = tag | remove: 'meta-related-collection-' %}
+    {% if collections[related_collection_handle].all_products_count > 0 %}
+      {% assign col = related_collection_handle %}
+      {% assign collection = collections[col] %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% if col and collections[col].all_products_count > 1 or collections[col].products.first.id != product.id %}
+<div id="related-products">
+  {% assign skip_product = product %}
+  {% assign products = collections[col].products %}
+  <div class="related-products__title">
+    <h4 class="title center">{{ 'products.product.related_items' | t }}</h4>
+    {% assign limit = section.settings.related_products_limit %}
+    {% if col and collections[col].all_products_count > 0 %}
+    {% include 'related-products-swiper-gallery', related_products: true %}
+    {% endif %}
+  </div>
+</div>
+{% endif %}

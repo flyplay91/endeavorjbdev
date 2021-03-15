@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1132px" height="208px" viewBox="0 0 1132 208" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>JB LOGO V1</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Logo-V1" transform="translate(-147.000000, -394.000000)" fill="#000000">
+            <g id="JB-LOGO-V1" transform="translate(147.000000, 340.000000)">
+                <path d="M63.3852952,215.049858 L63.3852952,57.5 L95.4130046,57.5 C95.4160775,86.8591646 95.4160775,103.960982 95.4130046,108.805452 C95.3991764,125.761096 95.4083952,142.716741 95.4083952,159.672385 C95.2701134,178.600849 95.3761294,197.531617 95.2171054,216.462386 C95.152574,224.001045 93.4816698,231.313843 90.2758384,238.191055 C85.0096092,249.493281 76.1618834,256.633228 64.2235609,259.818317 C53.3661406,262.715319 42.3704386,262.754499 31.5268464,259.772223 C15.6889792,255.418653 6.23972785,244.73639 2.46233199,228.99532 C1.37139093,224.452005 0.614408615,219.709211 0.575978874,215.049858 L31.9164813,215.049858 C32.3702501,227.432774 37.729971,233.624232 47.9956441,233.624232 C58.3604559,233.624232 63.4903396,227.432774 63.3852952,215.049858 Z" id="NEW-JB-J"></path>
+                <text id="OAH-BROWN" font-family="BebasNeue-Regular, Bebas Neue" font-size="288" font-weight="normal" letter-spacing="1">
+                    <tspan x="107" y="259">OAH BROW</tspan>
+                    <tspan x="1020.184" y="259" letter-spacing="2">N</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

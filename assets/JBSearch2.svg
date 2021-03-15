@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="101px" height="101px" viewBox="0 0 101 101" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.1 (67048) - http://www.bohemiancoding.com/sketch -->
+    <title>JB Search</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Design" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Icons" transform="translate(-517.000000, -170.000000)" fill="#000000" fill-rule="nonzero">
+            <g id="JB-Search" transform="translate(517.000000, 170.000000)">
+                <polygon id="Path-4" stroke="#000000" points="67.5 72 72 68 75 68 100 93 100 94.5 94 100 92 100 67.5 75.5"></polygon>
+                <path d="M41,82 C18.3563253,82 0,63.6436747 0,41 C0,18.3563253 18.3563253,0 41,0 C63.6436747,0 82,18.3563253 82,41 C82,63.6436747 63.6436747,82 41,82 Z M40.5,73 C57.8969696,73 72,58.8969696 72,41.5 C72,24.1030304 57.8969696,10 40.5,10 C23.1030304,10 9,24.1030304 9,41.5 C9,58.8969696 23.1030304,73 40.5,73 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

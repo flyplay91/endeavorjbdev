@@ -1,0 +1,34 @@
+{% assign cols = content | split: '<!-- split -->' %}
+{% if cols.size == 2 %}
+  <div class="">
+    {{ cols[0] }}
+  </div>
+  <div class="">
+    {{ cols[1] }}
+  </div>
+{% elsif cols.size == 3 %}
+  <div class="">
+    {{ cols[0] }}
+  </div>
+  <div class="">
+    {{ cols[1] }}
+  </div>
+  <div class="">
+    {{ cols[2] }}
+  </div>
+{% elsif cols.size == 4 %}
+  <div class="">
+    {{ cols[0] }}
+  </div>
+  <div class="">
+    {{ cols[1] }}
+  </div>
+  <div class="">
+    {{ cols[2] }}
+  </div>
+  <div class="">
+    {{ cols[3] }}
+  </div>
+{% else %}
+  {{ content }}
+{% endif %}

@@ -1,0 +1,103 @@
+<div class="thumbnail product-grid-item">
+  {% assign collection_handles = product.collections | map: 'handle' %}
+  {% if product.featured_image.alt contains 'youtube' or image.alt contains 'vimeo' %}
+  {% assign alt_text = product.title %}
+  {% else %}
+  {% assign alt_text = product.featured_image.alt %}
+  {% endif %}
+  <div class="product_image swap-{{ settings.collection_secondary_image }}">
+    <div class="image__container">
+      <div class="prod-image-wrap">
+        <a href="{{ product.url | within: collection }}" itemprop="url">
+          <img  src="{{ product.featured_image | product_img_url: '100x' }}"
+               alt="{{ alt_text | escape }}"
+               class="lazyload {{ settings.image_loading_style }} product-thumb-image"
+               style="{{ align_height_value }} max-width: {{- product.featured_image.width -}}px;"
+               data-sizes="auto"
+               data-src="{{ product.featured_image | product_img_url: '900x' }}"
+               data-srcset=" {{ product.featured_image | product_img_url: '300x' }} 300w,
+                            {{ product.featured_image | product_img_url: '400x' }} 400w,
+                            {{ product.featured_image | product_img_url: '500x' }} 500w,
+                            {{ product.featured_image | product_img_url: '600x' }} 600w,
+                            {{ product.featured_image | product_img_url: '700x' }} 700w,
+                            {{ product.featured_image | product_img_url: '800x' }} 800w,
+                            {{ product.featured_image | product_img_url: '900x' }} 900w"
+               />
+        </a>
+      </div>
+
+      {% comment %} size selector bar {% endcomment %}
+      {% if settings.size_enabled %}
+      <div class="hover-size-optin">
+        {% if product.available %}
+        <div class="sizelist"> 
+          {% for option in product.options %}
+          {% if option == 'Size' %}
+          {% assign index = forloop.index0 %}
+          {% assign colorlist = '' %}
+          {% assign color = '' %}
+          {% for variant in product.variants %}
+          {% capture color %}
+          {{ variant.options[index] }}
+          {% endcapture %}
+
+          {% unless colorlist contains color %}
+
+
+          <form action="/cart/add"
+                method="post"
+                class="clearfix product_form init {% if product.variants.size > 1 or product.options.size > 1 %}product_form_options{% endif %}"
+                id="product-form-{{ variant.id }}"
+                data-money-format="{{ shop.money_format }}"
+                data-shop-currency="{{ shop.currency }}"
+                data-select-id="product-select-{{ variant.id }}{{ product-form }}{{ section.id }}{{ block.id }}"
+                data-enable-state="{% if template contains 'collection' %}true{% else %}false{% endif %}"
+                data-product="{{ product | json | escape }}"
+                {% if settings.limit_quantity or settings.display_inventory_left %}
+                data-variant-inventory='[{%- for v in variant -%}{"id":{{v.id}},"inventory_quantity":{{v.inventory_quantity}},"inventory_management":"{{v.inventory_management}}","inventory_policy":"{{v.inventory_policy}}"}{% if forloop.last == false %},{% endif %}{%- endfor -%}]'
+                {% endif %}
+                data-product-id="{{ variant.id }}"
+                >
+
+
+            <input type="hidden" name="id" value="{{ variant.id }}" />
+            {% if variant.available %}
+            <button type="submit" name="add" id="{{ variant.id }}" class="avactive">{{ color | downcase }}</button>
+
+            {% else %}
+
+            <button type="submit" id="{{ variant.id }}" title="Out of Stock"  class="notactve" >{{ color | downcase }}</button>
+
+            {% endif %}
+          </form>
+          {% capture tempList %}
+          {{colorlist | append: color | append: " " }}
+          {% endcapture %}
+          {% assign colorlist = tempList %}
+          {% endunless %}
+          {% endfor %}
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="sizelist" id="out-of-stock-size-list">
+          <a href="{{ product.url | within: collection }}" itemprop="url">
+            <p id="thumbnail-notify-me">NOTIFY ME WHEN THIS PRODUCT IS IN STOCK </p>
+          </a>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    {% include "product-details" %}
+
+
+
+  </div>
+  <a class="product-info__caption {% if settings.thumbnail_hover_enabled %}hidden{% endif %}" href="{{ product.url | within: collection }}" itemprop="url">
+    {% include "product-info" %}
+
+  </a>
+  {% include 'collection-swatch' %}
+</div>

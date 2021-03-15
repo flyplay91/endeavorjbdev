@@ -1,0 +1,24 @@
+{% assign tagName = 'meta-product-style-' %}
+{% assign productStylesList = '' %}
+
+{% for pTag in product.tags %}
+  {% if pTag contains tagName %}
+    {% capture productStylesList %}{{ productStylesList }}{% unless productStylesList == '' %},{% endunless %}{{ pTag | remove: tagName }}{% endcapture %}
+  {% endif %}
+{% endfor %}
+
+{% assign productStyles = productStylesList | split: ',' %}
+
+{% if productStyles.size > 0 %}
+<h4 class="details toggle menu product-styles__title">MODEL IS ALSO WEARING</h4>
+<div class="product-styles">
+  {% for pStyleHandle in productStyles %}
+    {% assign pStyle = all_products[pStyleHandle] %}
+    <div class="product-styles__item">
+      <a href="{{ pStyle.url }}">
+        <img src="{{ pStyle.featured_image | img_url: '300x' }}" alt="{{ product.title }} style {{ pStyle.title }}">
+      </a>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}

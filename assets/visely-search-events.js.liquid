@@ -1,0 +1,64 @@
+;(function ( viselySearchExtension, undefined ) {
+  
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("a#search-icon, span#search-icon-text")
+    	.forEach(d => {
+      		d.addEventListener('mousedown', function(e){
+             setTimeout(function(){ 
+               let input = document.querySelector("#jb-all-search");
+               input.focus();
+               input.dispatchEvent(new Event('mousedown'));
+             }, 10);
+       		});
+    	});
+  
+      let results = document.querySelector('div.search-results');
+      if(results) {
+        let screen = window.getComputedStyle(results, ':before').getPropertyValue('content').replace(/\"/g, '');
+        if (screen == 'large') {
+          results.classList.toggle('open');
+        }
+      }
+	});
+  
+    document.addEventListener('search.results.rendered', function (e) { 
+
+      var element = e.detail.element;
+      e.detail.products.forEach(function(product) {
+          var tile = element.querySelector('[data-visely-product-id="'+ product.id + '"]');
+          var thumbnail = tile.querySelector('.search-thumbnail');
+        
+          var stockLevel = Number(product.stockLevel);
+        
+          if(stockLevel <= 0) {
+             var left = document.createElement('div');
+             left.textContent = 'SOLD OUT';
+             left.setAttribute('class','soldOutIcn');
+			 thumbnail.appendChild(left);
+          }
+      });
+      
+      document.querySelectorAll("#jb-all-search").forEach(elem => {
+        elem.value = "";
+      });
+      
+      document.querySelectorAll("#jb-all-search-mobile").forEach(elem => {
+        elem.value = "";
+      });
+      
+    }, false);
+    document.addEventListener('search.results.provided', function (e) { 
+    }, false);
+    document.addEventListener('search.suggestions.rendered', function (e) {
+    }, false);
+    document.addEventListener('search.suggestions.provided', function (e) { 
+    }, false);
+
+    viselySearchExtension.wrapSearchSuggestions = function (container) {
+        return container;
+    };
+  
+    viselySearchExtension.wrapSearchResults = function (container) {
+        return container;
+    };
+}( window.viselySearchExtension = window.viselySearchExtension || {} ));

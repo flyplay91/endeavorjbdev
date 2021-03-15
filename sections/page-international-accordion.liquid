@@ -1,0 +1,120 @@
+{% include 'accordion' with blocks: section.blocks %}
+
+{% schema %}
+  {
+    "name": "International Accordion",
+    "settings": [
+	],
+	"blocks": [
+      {
+        "type": "block",
+        "name": "Block",
+        "settings": [
+		  {
+			"type": "text",
+			"label": "Block Heading",
+			"id": "title",
+			"default": "Heading"
+		  },
+		  {
+			"type": "richtext",
+			"label": "Block Description",
+			"id": "description",
+			"default": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>"
+		  }
+		]
+	  }
+	]
+  }
+{% endschema %}
+
+<style type="text/css">
+  .container.main.content {
+    margin-top: 81px;
+  }
+  
+  .container.main.content .container.main.content {
+    margin-top: 0;
+  }
+  
+  #shopify-section-page-international-accordion {
+    width: 100%;
+    max-width: 718px;
+    margin: 0 auto;
+  }
+  
+  @media screen and (max-width: 479px) {
+    .container.main.content {
+      margin-top: 48px;
+    }
+  }
+  
+  
+  .accordion {
+    color: #444;
+    cursor: pointer;
+    padding: 32px 0 15px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid #999;
+    outline: none;
+    transition: 0.4s;
+    position: relative;
+    margin: 0;
+  }
+  
+  label.accordion,
+  label.accordion span {
+    font-weight: 500;
+    display: inline-block;
+    margin-right: 40px;
+  }
+
+  .accordion [class*="icon"] {
+    position: absolute;
+    right: 0;
+    font-size: 24px !important;
+    top: 36px;
+    font-weight: 300;
+    margin-right: 0;
+  }
+  
+  .accordion [class*="icon"]::after {
+    right: 0;
+  }
+  
+  .panel {
+    padding: 12px 0 0;
+    background-color: transparent;
+    display: none;
+    overflow: hidden;
+  }
+  .panel p {
+    font-size: 12px;
+    text-transform: initial;
+  }
+</style>
+
+<script type="text/javascript">
+  (function() {
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        this.querySelector('.icon-plus').classList.toggle('hidden');
+        this.querySelector('.icon-minus').classList.toggle('hidden');
+
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+          panel.style.display = "none";
+        } 
+        else {
+          panel.style.display = "block";
+        }
+      });
+    }
+  })();
+</script>

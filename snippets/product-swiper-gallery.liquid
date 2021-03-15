@@ -1,0 +1,28 @@
+{% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+<div class="gallery-wrap">
+  <div id="product-image-gallery" class="swiper-container">
+    <div class="product_gallery swiper-wrapper">
+      {% for image in product.images %}
+          <div class="swiper-slide">
+            <img src="{{ image.src | product_img_url: "200x" }}"
+                data-src="{{ image_1200x }}"
+                class="lazyload"
+                srcset="{{ image.src | product_img_url: "200x" }} 200w,
+                        {{ image.src | product_img_url: "400x" }} 400w,
+                        {{ image.src | product_img_url: "600x" }} 600w"
+                />
+          </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+  <div id="product-gallery-nav" class="product_gallery_nav product-{{ product.id }}-gallery-nav">
+    {% for image in product.images %}
+    <div class="gallery-cell">
+      <img src="{{ image.src | product_img_url: "200x" }}" data-index="{{ forloop.index0 }}" />
+    </div>
+    {% endfor %}
+  </div>
+</div>

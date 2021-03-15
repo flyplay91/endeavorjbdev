@@ -1,0 +1,627 @@
+{% comment %}
+** Product - default view **
+- Product template
+{% endcomment %}
+
+
+{% comment %}insurance products don't use certain features; ids are hard coded here and checked against{% endcomment %}
+{% assign insuranceProduct = false %}
+{% if variant.product.id == 3505237885030 or variant.product.id == 3925308047478 %}
+{% assign insuranceProduct = true %}
+{% endif %}
+
+<div class="product-template product-{{ product.id }}" id="product-{{ product.id }}" data-free-text="{{ settings.free_price_text }}">
+  <div class="section product_section js-product_section" itemscope itemtype="http://schema.org/Product" data-rv-handle="{{ product.handle }}">
+    <div class="product-images">
+      {% include 'product-swiper-gallery' %}
+    </div>
+    <div class="product-main">
+      <div class="product-meta">
+        {% assign collection_handles = product.collections | map: 'handle' %}
+        {% assign variant = product.selected_or_first_available_variant %}
+
+        {% if product.available %}
+        {% if settings.sale_banner_enabled and product.compare_at_price_max > product.price %}
+        <div class="sale_banner_product">{{ 'collections.general.sale' | t }}</div>
+        {% endif %}
+        {% endif %}
+        {% if collection_handles contains 'new' %}
+        <div class="new_banner_product">{{ 'collections.general.new' | t }}</div>
+        {% endif %}
+        {% if collection_handles contains 'pre-order' %}
+        <div class="preorder_banner_product">{{ 'collections.general.pre_order' | t }}</div>
+        {% endif %}
+        {% if section.settings.display_vendor %}
+        <p class="vendor">
+          <span itemprop="brand" class="vendor">{{ product.vendor | link_to_vendor }}</span>
+        </p>
+        {% endif %}
+        {% if variant.sku != blank and section.settings.display_sku %}
+        <p class="sku">
+          <span itemprop="sku">{{ variant.sku }}</span>
+        </p>
+        {% endif %}
+        <h1 class="product_name" itemprop="name">{{ product.title }}</h1>
+        {% if settings.enable_shopify_product_badges and settings.enable_shopify_review_comments %}
+        <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+        {% endif %}
+      </div>
+      <div class="product-prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        {% if collection_handles contains 'coming-soon' %}
+        <p class="modal_price">{{ 'collections.general.coming_soon' | t }}</p>
+        {% else %}
+        <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+        <meta itemprop="seller" content="{{ shop.name | escape }}" />
+        <link itemprop="availability" href="http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}">
+        <meta itemprop="itemCondition" content="New" />
+
+        <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+        {% comment %} price values are hidden for gift cards {% endcomment %}
+        {% if product.title != 'Gift Card' %}
+        <span itemprop="price" content="{{ variant.price | money_without_currency | remove: "," }}" class="{% if variant.compare_at_price > variant.price %}sale{% endif %}">
+          {% if variant.price < variant.compare_at_price and variant.available %}
+          <span class="was_price">
+            <span class="money">{{ variant.compare_at_price | money_without_trailing_zeros  }}</span>
+          </span>
+          {% endif %}
+          <span class="current_price {% if product.available == false %}hidden{% endif %}">
+            {% if variant.price > 0 %}
+            <span class="money">{{ variant.price | money_without_trailing_zeros  }}</span>
+            {% else %}
+            {{ settings.free_price_text }}
+            {% endif %}
+          </span>
+        </span>
+        {% endif %} {% comment %} if Gift Card {% endcomment %}
+        {% if section.settings.display_savings %}
+        <span class="sale savings">
+          {% if variant.price < variant.compare_at_price and variant.available %}
+          {{ 'products.product.savings' | t }}  {{ variant.compare_at_price | minus: variant.price | times: 100 | divided_by: variant.compare_at_price }}% (<span class="money">{{ variant.compare_at_price | minus: variant.price | money_without_trailing_zeros  }}</span>)
+          {% endif %}
+        </span>
+        {% endif %} {% comment %} ./section.settings.display_savings {% endcomment %}
+        {% endif %}
+      </div>
+      {% if section.settings.product_description_position == "top" and product.description != blank %}
+      <div class="description" itemprop="description">
+        {{ product.description | split: '<!-- split -->' | first }}
+      </div>
+      {% endif %}
+
+      {% unless collection_handles contains 'coming-soon' %}
+      <div class="product-form">
+        {% include 'product-form' with 'product' %}
+      </div>
+      {% endunless %}
+
+      {%comment%}{% if section.settings.product_description_position == "bottom" and product.description != blank %}
+      <div class="description bottom" itemprop="description">
+        <label class="details">DETAILS</label>
+        {{ product.description | split: '<!-- split -->' | first }}
+      </div>
+      {% endif %}{%endcomment%} 
+
+      {%comment%}NEW DETAILS TAB{%endcomment%} 
+      {% if section.settings.product_description_position == "bottom" and product.description != blank %}
+        <dl class="additional-info accordion toggle-all--true details-tab">
+          <dt><h4 class="details toggle menu">DETAILS <span class="right icon-down-arrow"></span></h4></dt>
+          <dd class="toggle_content toggle_list" >
+             {{ product.description | split: '<!-- split -->' | first }}
+          </dd>
+        </dl>
+      	{% endif %}
+
+
+      {% if product.options contains 'Size' %}
+      	{% unless product.tags contains 'No Size Chart' %}
+        <dl class="additional-info accordion toggle-all--true">
+          <dt><h4 class="details toggle menu">SIZING <span class="right icon-down-arrow"></span></h4></dt>
+          <dd class="toggle_content toggle_list" >
+            <div class="size_chart-block">
+              {% include "product-size-chart" with product %}
+            </div>
+          </dd>
+        </dl>
+      	{% endunless %}
+      {% endif %}
+
+
+      <dl class="additional-info accordion toggle-all--true">
+        <dt><h4 class="details toggle menu">SHIPPING <span class="right icon-down-arrow"></span></h4></dt>
+        <dd class="toggle_content toggle_list">
+          <p>Free shipping on all domestic orders over $200</p>
+          <p>Free shipping on all Canadian orders over $250</p>
+          <p>Free shipping on all international orders over $300</p>
+        </dd>
+      </dl>
+
+      {% include 'product-styles' %}
+
+      {% if settings.enable_shopify_review_comments and settings.review_position == "next_to_gallery" %}
+      <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+      {% endif %}
+      {% if section.settings.display_collections or section.settings.display_tags or section.settings.display_type %}
+      <div class="product_links">
+        {% if section.settings.display_collections %}
+        <p>
+          <span class="label">{{ 'products.product.collections' | t }}:</span>
+          <span>
+            {% for col in product.collections %}
+            <a href="{{ col.url }}" title="{{ col.title }}">{{ col.title }}</a>{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          </span>
+        </p>
+        {% endif %}
+        {% if section.settings.display_tags %}
+        <p>
+          {% for tag in product.tags %}
+          {% if forloop.first %}
+          <span class="label">{{ 'products.product.tags' | t }}:</span>
+          {% endif %}
+
+          {% unless tag contains 'meta-' %}
+          <span>
+            <a href="/collections/{% if collection %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handle }}" title="{{ 'products.product.products_tagged' | t: tag: tag }}">{{ tag }}</a>{% unless forloop.last %},{% endunless %}
+          </span>
+          {% endunless %}
+          {% endfor %}
+        </p>
+        {% endif %}
+      </div>
+      {% endif %}
+      {% if section.settings.display_social_buttons %}
+      <div class="meta">
+        {% include "social-buttons" with "product" %}
+      </div>
+      {% endif %}
+    </div>
+    {% include 'sidebar-product' %}
+  </div>
+
+  {% if product.description contains "<!-- split -->"  %}
+  <br class="clear" />
+  <div class="section clearfix">
+    <div class="description">
+      {{ product.description | split: '<!-- split -->' | last }}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if settings.enable_shopify_review_comments and settings.review_position == "below_gallery" %}
+  <div class="shopify-reviews">
+    <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+  </div>
+  {% endif %}
+
+</div> <!-- end product body -->
+{% if sidebar %}
+<div class="mobile-recent-related">
+  <div class="visible-xs recent-view-product-mobile">
+    {% if section.settings.display_recently_viewed %}
+    {% include 'recently-viewed' %}
+    {% endif %}
+  </div>
+  {% if section.settings.display_related_products %}
+  {% include 'related-products' %}
+  {% endif %}
+</div><!-- ./mobile-recent-related -->
+<div class="mobile-recently-viewed">
+  {% if section.settings.display_recently_viewed %}
+  {% include 'recently-viewed' %}
+  {% endif %}
+</div><!-- ./mobile-recently-viewed -->
+{% elsif section.settings.display_related_products %}
+{% include 'related-products' %}
+{% endif %}
+
+{% comment %}
+<div class="center breadcrumb_text1 breadcrumb_text">
+  <a href="{{ collection.previous_product }}" title="{{ 'products.general.previous_product_html' | t }}" class="breadcrumb_link"> {{ 'products.general.previous_product_html' | t }} Product</a>
+  {% if collection.previous_product and collection.next_product %}<span class="breadcrumb-divider"> | </span>{% endif %}
+  <span style="margin-right: 45px;"></span>
+  <a href="{{collection.next_product}}" title="{{ 'products.general.next_product_html' | t }}" class="breadcrumb_link">{{ 'products.general.next_product_html' | t }} Product</a>
+</div>
+{% endcomment %}
+<script>
+  document.sezzleConfig = {
+    targetXPath: '.modal_price/.current_price',
+    forcedShow: false,
+    alignment: 'left',
+    merchantID: '82394a65-a832-4262-a3aa-c8dd9c754709',
+    theme: 'light',
+    widgetType: 'product-page',
+    minPrice: 0,
+    maxPrice: 100000,
+    imageUrl: 'https://d3svog4tlx445w.cloudfront.net/branding/sezzle-logos/png/sezzle-logo-all-black-sm-100w.png',
+  }
+</script>
+<script src="https://widget.sezzle.com/v1/javascript/price-widget/initial"></script>
+{% schema %}
+{
+"name": "Product",
+"class": "product-template",
+"settings": [
+{
+"type": "header",
+"content": "Product gallery"
+},
+{
+"type": "checkbox",
+"id": "gallery_arrows",
+"label": "Show arrows on product gallery",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "activate_zoom",
+"label": "Magnify product images on hover"
+},
+{
+"type": "checkbox",
+"id": "enable_product_lightbox",
+"label": "Enable product gallery popup",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "activate_autoplay",
+"label": "Enable product gallery slideshow"
+},
+
+{
+"type": "select",
+"id": "slideshow_animation",
+"label": "Gallery transition",
+"options": [
+{
+"value": "slide",
+"label": "Slide"
+},
+{
+"value": "fade",
+"label": "Fade"
+}
+],
+"default": "slide"
+},
+{
+"type": "radio",
+"id": "product_images_position",
+"label": "Gallery position",
+"options": [
+{
+"value": "left",
+"label": "Left"
+},
+{
+"value": "right",
+"label": "Right"
+}
+]
+},
+{
+"type": "checkbox",
+"id": "product_thumbs",
+"label": "Show product gallery thumbnails",
+"default": true
+},
+{
+"type": "select",
+"id": "thumbnail_position",
+"label": "Thumbnail position",
+"default": "bottom-thumbnails",
+"options": [
+{
+"value": "left-thumbnails",
+"label": "Left"
+},
+{
+"value": "bottom-thumbnails",
+"label": "Bottom"
+},
+{
+"value": "right-thumbnails",
+"label": "Right"
+}
+]
+},
+{
+"type": "header",
+"content": "Product info"
+},
+{
+"type": "checkbox",
+"id": "product_breadcrumb",
+"label": "Show breadcrumb links"
+},
+{
+"type": "checkbox",
+"id": "display_vendor",
+"label": "Show vendor"
+},
+{
+"type": "checkbox",
+"id": "display_sku",
+"label": "Show SKU"
+},
+{
+"type": "checkbox",
+"id": "display_savings",
+"label": "Show price savings",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "display_collections",
+"label": "Show collections"
+},
+{
+"type": "checkbox",
+"id": "display_type",
+"label": "Show type"
+},
+{
+"type": "checkbox",
+"id": "display_tags",
+"label": "Show tags"
+},
+{
+"type": "checkbox",
+"id": "display_social_buttons",
+"label": "Show social media share icons",
+"default": true
+},
+{
+"type": "radio",
+"id": "product_description_position",
+"label": "Description position",
+"options": [
+{
+"value": "top",
+"label": "Above product form"
+},
+{
+"value": "bottom",
+"label": "Below product form"
+}
+]
+},
+{
+"type": "header",
+"content": "Related products"
+},
+{
+"type": "checkbox",
+"id": "display_related_products",
+"label": "Show related products ([?](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115006909487-Related-Products))",
+"default": true
+},
+{
+"type": "radio",
+"id": "related_products_style",
+"label": "Layout",
+"default": "grid",
+"options": [
+{
+"value": "slider",
+"label": "Slider"
+},
+{
+"value": "grid",
+"label": "Grid"
+}
+]
+},
+{
+"type": "range",
+"id": "related_products_limit",
+"label": "Limit products",
+"min": 2,
+"max": 50,
+"step": 1,
+"default": 12
+},
+{
+"type": "range",
+"id": "products_per",
+"label": "Products per row",
+"min": 3,
+"max": 6,
+"step": 1,
+"default": 3
+},
+{
+"type": "header",
+"content": "Recently viewed products"
+},
+{
+"type": "paragraph",
+"content": "To test the recently viewed products, view your online store outside of the Editor and visit multiple product pages ([?](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115008765228))"
+},
+{
+"type": "checkbox",
+"id": "display_recently_viewed",
+"label": "Show recently viewed products",
+"default": false
+},
+{
+"type": "text",
+"id": "rv_title",
+"label": "Title",
+"default": "Recently Viewed Items"
+},
+{
+"type": "radio",
+"id": "rv_products_style",
+"label": "Layout",
+"default": "grid",
+"options": [
+{
+"value": "slider",
+"label": "Slider"
+},
+{
+"value": "grid",
+"label": "Grid"
+}
+]
+},
+{
+"type": "range",
+"id": "rv_max_display",
+"label": "Products limit",
+"min": 1,
+"max": 12,
+"step": 1,
+"default": 4
+},
+{
+"type": "range",
+"id": "rv_per",
+"label": "Products per row",
+"min": 3,
+"max": 6,
+"step": 1,
+"default": 4
+},
+{
+"type": "header",
+"content": "free-shipping"
+},
+
+{
+"type": "text",
+"id": "free-shipping-text1",
+"label": "Free Shipping Text line 1"
+},
+{
+"type": "text",
+"id": "free-shipping-text2",
+"label": "Free Shipping Text line 2"
+},
+{
+"type": "text",
+"id": "free-shipping-text3",
+"label": "Free Shipping Text line 3"
+},
+{
+"type": "text",
+"id": "free-shipping-text4",
+"label": "Free Shipping Text line 4"
+},
+{
+"type": "header",
+"content": "Sidebar"
+},
+{
+"type": "paragraph",
+"content": "Create a sidebar by adding content blocks."
+},
+{
+"type": "checkbox",
+"id": "toggle",
+"label": "Toggle sidebar content",
+"default": false
+}
+
+],
+"blocks": [
+{
+"type": "filter_by_collection",
+"name": "Collection list",
+"limit": 1
+},
+{
+"type": "menu",
+"name": "Menu",
+"settings": [
+{
+"type": "link_list",
+"id": "custom_menu_linklist",
+"label": "Menu"
+}
+]
+},
+{
+"type": "page",
+"name": "Page",
+"settings": [
+{
+"type": "page",
+"id": "content_page",
+"label": "Page"
+}
+]
+},
+{
+"type": "recently_viewed",
+"name": "Recently viewed products",
+"limit": 1,
+"settings": [
+{
+"type": "paragraph",
+"content": "To test the recently viewed products, view your online store outside of the Editor and visit multiple product pages ([?](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115008765228))"
+},
+{
+"type": "text",
+"id": "sidebar_rv_title",
+"label": "Title",
+"default": "Recently Viewed"
+},
+{
+"type": "range",
+"id": "sidebar_rv_per",
+"label": "Products limit",
+"min": 1,
+"max": 6,
+"step": 1,
+"default": 1
+}
+]
+},
+{
+"type": "filter_by_tag",
+"name": "Tag list",
+"limit": 1
+},
+{
+"type": "text",
+"name": "Text",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Heading",
+"default": "Heading"
+},
+{
+"type": "richtext",
+"id": "text",
+"label": "Text",
+"default": "<p>Text area can be used for special announcements or general information.</p>"
+}
+]
+},
+{
+"type": "filter_by_type",
+"name": "Type list",
+"limit": 1
+},
+{
+"type": "filter_by_vendor",
+"name": "Vendor list",
+"limit": 1
+}
+],
+"default": {
+"settings": {
+
+}
+}
+}
+{% endschema %}
+<script>
+  var product = (function() {
+    return {{ product | json }};
+  })();
+</script>

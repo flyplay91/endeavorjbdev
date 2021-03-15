@@ -1,0 +1,61 @@
+<link href="{{ 'visely-search.css' | asset_url }}" rel="stylesheet" defer />
+<script type="text/javascript">
+   var ViselyPageLoadStart = ViselyPageLoadStart || performance ? performance.now() : -1;
+   var ViselyContext = ViselyContext || {% if customer %}{ 'currentCustomer': { 'email': '{{customer.email}}' } }{% else %}{}{% endif %};
+   var ViselySearchConfig = {% include 'visely_search_config' %};
+                                                          
+   var ViselySearchSuggestionsCustomLayout = `<section class="redirects suggestions blogs articles pages"></section>
+<section class="products"></section>`;
+  
+   var ViselySearchCustomFacetsMapping = {
+    'facet':{
+      'pricef':'DefaultSliderCurrencyRangeFacetRenderer'
+    },
+    'removeOnly': {
+      'pricef':'DefaultRemoveOnlySliderCurrencyRangeFacetRenderer'
+    }
+  };
+  
+    var ViselySearchResultsCustomLayout = `<section class="header"></section>
+    <section class="panel"></section>
+    <section class="facets main"></section>
+    <section class="pagination"></section>`;
+ 
+  var ViselyFacetValuesCustomPreSorting = {
+    'varf_Size': function(facet) {
+      
+      let map = {
+        'One Size': 1,
+        'X/S': 2,
+        'S/M': 3,
+        'M/L': 4
+      };
+      
+      let sorted = facet.values.sort(function(a, b) {
+      	let avar = map[a.name] || 5;
+        let bvar = map[b.name] || 5;
+        if(avar === bvar) return 0;
+        return avar > bvar ? 1 : -1; 
+      });
+      
+      return sorted;
+     }
+  };
+
+  
+</script>
+<script type="text/javascript">
+  (function(){if(typeof window.CustomEvent==="function")return!1;function CustomEvent(event,params){params=params||{bubbles:!1,cancelable:!1,detail:undefined};var evt=document.createEvent('CustomEvent');evt.initCustomEvent(event,params.bubbles,params.cancelable,params.detail);return evt}
+  CustomEvent.prototype=window.Event.prototype;window.CustomEvent=CustomEvent})();if(!Array.from){Array.from=(function(){var toStr=Object.prototype.toString;var isCallable=function(fn){return typeof fn==='function'||toStr.call(fn)==='[object Function]'};var toInteger=function(value){var number=Number(value);if(isNaN(number)){return 0}
+  if(number===0||!isFinite(number)){return number}
+  return(number>0?1:-1)*Math.floor(Math.abs(number))};var maxSafeInteger=Math.pow(2,53)-1;var toLength=function(value){var len=toInteger(value);return Math.min(Math.max(len,0),maxSafeInteger)};return function from(arrayLike){var C=this;var items=Object(arrayLike);if(arrayLike==null){throw new TypeError('Array.from requires an array-like object - not null or undefined')}
+  var mapFn=arguments.length>1?arguments[1]:void undefined;var T;if(typeof mapFn!=='undefined'){if(!isCallable(mapFn)){throw new TypeError('Array.from: when provided, the second argument must be a function')}
+  if(arguments.length>2){T=arguments[2]}}
+  var len=toLength(items.length);var A=isCallable(C)?Object(new C(len)):new Array(len);var k=0;var kValue;while(k<len){kValue=items[k];if(mapFn){A[k]=typeof T==='undefined'?mapFn(kValue,k):mapFn.call(T,kValue,k)}else{A[k]=kValue}
+  k+=1}A.length=len;return A}}())}
+</script>
+<script type="text/javascript">Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(r,e){if(null==this)throw new TypeError('"this" is null or not defined');var t=Object(this),n=t.length>>>0;if(0===n)return!1;var i,o,a=0|e,u=Math.max(a>=0?a:n-Math.abs(a),0);for(;u<n;){if((i=t[u])===(o=r)||"number"==typeof i&&"number"==typeof o&&isNaN(i)&&isNaN(o))return!0;u++}return!1}});</script>
+{{ "visely-search-events.js" | asset_url | script_tag }} 
+{% if template.name == 'search' and template.suffix == 'results' %}
+<script type="text/javascript">var ViselySearch = true;</script>
+{% endif %}

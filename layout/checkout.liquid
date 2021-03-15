@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+
+    <!-- URW-DIN Web Font  -->
+    <link rel="stylesheet" href="https://use.typekit.net/vip1bac.css">  
+    
+    <title>{{ page_title }}</title>
+
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+    {% if settings.favicon != nil %}
+      <link rel="shortcut icon" type="image/x-icon" href="{{ settings.favicon | img_url: '32x32' }}">
+    {% else %}
+      <link rel="shortcut icon" type="image/x-icon" href="{{ 'JB-favicon.png' | asset_url }}">
+    {% endif %}
+  <style>
+    *, *::placeholder {
+      text-transform: uppercase !important;
+      font-family: urw-din, sans-serif !important;
+      font-size: 12px;
+    }
+    @media screen and (min-width: 1000px) {
+      .main {
+        border-right: 1px solid #c4c4c4;
+      }
+    }
+    /* hide cart breadcrumb - we don't want people to look at the cart page if possible */
+    .breadcrumb__item:first-child {
+      display: none;
+    }
+    .main__header {
+      padding-bottom: 40px;
+    }
+    .page--logo-main .breadcrumb {
+      margin-top: 22px;
+    }
+    .section-heading {
+      position: relative;
+      font-size: 14px;
+      font-weight: 500;
+      color: #000000 !important;
+      text-align: center;
+      margin-top: 68px !important;
+      margin-bottom: 31px;
+      padding: 0;
+    }
+    .sidebar .icon-svg--color-adaptive-light {
+      color: #000;
+    }
+
+    .checkout-infobar {
+  	  font-size: 10px;
+  	  color: #ffffff;
+  	  background: #000000;
+  	  padding:0;
+  	  text-align: center;
+      border: 2px solid black;
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 20px;
+      margin-bottom: 0;
+      letter-spacing: 1.9px;
+      height: 0; /* hide the text, we just want the black bar to match the site */
+    }
+  
+    .checkout-logo img {
+      width: 209.8px;
+      height: 39px;
+    }
+    .field {
+      margin: 12px 0 0;
+      padding: 0 13px 0 0;
+    }
+    .fieldset {
+      margin: 0 0 12px;
+    }
+    .fieldset .field__input-btn:last-child, .step__footer__continue-btn {
+      margin-right: 0 !important;
+    }
+    .fieldset .field {
+      padding-right: 0;
+    }
+    
+    @media screen and (min-width: 1000px) {
+      .fieldset .field[data-address-field="first_name"],
+      .fieldset .fieldset .field--third:nth-of-type(n+1),
+      .fieldset .field--third:nth-of-type(n+2) {
+        padding-right: 12px;
+      }
+    }
+    
+    .field__input {
+      border-radius: 0;
+      border-width: 0 0 1px 0;
+      text-transform: uppercase;
+      font-size: 10px;
+      line-height: 10px;
+      padding: 18px 15px;
+      height: 50px;
+    }
+    .field__input:focus, .field__input-wrapper--flag-focus .field__input {
+      box-shadow: initial;
+      -webkit-box-shadow: initial;
+    }
+    .field--error .field__input {
+      box-shadow: initial;
+    }
+    .floating-labels .field--show-floating-label .field__input {
+      padding: 18px 15px !important;
+    }
+    
+    .floating-labels .field--show-floating-label .field__input--select {
+      padding-left: 10px !important;
+    }
+    
+    .floating-labels .field__label {
+      padding: 0 15px;
+      top: 0px;
+      margin: 0;
+      font-size: 8px;
+      line-height: 8px;
+    }
+    .btn, .btn:hover, .btn:active {
+      text-transform: uppercase;
+      font-size: 12px;
+      line-height: normal;
+      font-weight: 600;
+      height: auto;
+      border-radius: 0;
+      background: black;
+      color: white;
+      border: 1px solid black;
+      font-weight: normal;
+      margin-right: 8px;
+    }
+    .js .sidebar .btn--disabled {
+      background: transparent;
+      color: #d9d9d9;
+      border-color: #d9d9d9;
+    }
+    .field-caret {
+      height: 20px;
+    }
+    .payment-due__price {
+      font-size: 14px;
+      color: #000;
+    }
+    table.product-table td,
+    table.product-table th {
+      vertical-align: top;
+    }
+    
+    .product-thumbnail__quantity {
+      color: #333333;
+      background: white;
+      border: 1px rgba(0,0,0,0.1) solid;
+      line-height: 1.5em;
+      width: 1.75em;
+      height: 1.75em;
+    }
+    .product__description__name, .product__price .order-summary__emphasis {
+      display: block;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .product__description__variant {
+      font-size: 12px;
+      color: #333;
+    }
+    .order-summary__section {
+      padding: 0;
+      margin: 12px 0 21px;
+    }
+    .order-summary__section--discount {
+      margin-top: 0;
+    }
+    .order-summary__section ~ .order-summary__section {
+      border-top: initial;
+    }
+    .order-summary__section:first-of-type {
+      border-top:1px solid #e5e5e5;
+      padding-top: 21px;
+    }
+    .sidebar .payment-due__currency {
+      display: none;
+    }
+    .sidebar .payment-due__price {
+      top: -2px;
+      position: relative;
+    }
+    input:focus {
+      outline: none;
+    }
+    div[data-step=shipping_method] .content-box,
+    div[data-step=payment_method] .step__sections .section:first-child .content-box,
+    .section--remember-me .content-box {
+      border: 0 none !important;
+      border-radius: 0 !important;
+    }
+    div[data-step=shipping_method] .content-box__row,
+    div[data-step=payment_method] .step__sections .section:first-child .content-box__row,
+    .section--remember-me .content-box__row {
+      border-radius: 0 !important;
+      border: 0 none !important;
+      padding: 14px 0;
+    }
+    
+    .sidebar::after {
+      display: none;
+    }
+    
+    .js .main .btn--disabled {
+      background: white;
+    }
+    
+    @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
+      .checkout-logo {
+        display: none;
+      }
+      .order-summary__section {
+        padding-top: 0;
+      }
+    }
+    @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-device-pixel-ratio: 2) {
+      .checkout-logo {
+        display: none;
+      }
+      .order-summary__section {
+        padding-top: 0;
+      }
+    }
+  
+    @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
+      .checkout-logo {
+        display: none;
+      }
+      .order-summary__section {
+        padding-top: 0;
+      }
+    } 
+    
+    @media screen and (max-width: 1000px) {
+      .checkout-logo {
+        display: none;
+      }
+      .order-summary__section {
+        padding-top: 0;
+      }
+      .section-heading {
+        padding: 0;
+      }
+    }
+    input:focus {
+     outline-style: none;
+     box-shadow: none;
+     border-color: transparent;
+   }
+    button:focus {
+      outline-style: none;
+      box-shadow: none;
+      border-color: transparent;
+  }
+    
+    @media screen and (min-width: 1000px) {
+      .hide-on-desktop {
+        display: none;
+      }
+    }
+    
+    @media screen and (max-width: 999px) {     
+      .field__input {
+        border-width: 1px 1px 1px 1px;
+      }
+      .floating-labels .field__label {
+        top: 6px;
+      }
+    }
+    
+    .mobile-checkout-logo {
+      width: auto;
+      height: 35px !important;
+      margin: 15px 25%;
+    }
+    .hidden {
+      display: none !important;
+    }
+
+    .product .reduction-code, .product__price .order-summary__small-text {
+      display: none;
+    }
+    
+    .logged-in-customer-information__avatar-wrapper {
+      display: none !important;
+    }
+  </style>
+  {{ 'shopify-format-money.js' | asset_url | script_tag }}
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script>
+    window.addEventListener('load', function() {
+    if(typeof Checkout === 'object') {
+      if(typeof Checkout.$ === 'function') {
+          Checkout.$('button.order-summary-toggle.order-summary-toggle--show').trigger("click");
+        }
+      }
+      console.log("ready");
+      $('#checkout_buyer_accepts_marketing:not(:checked)').trigger("click");
+    });
+    (function($) {
+      function adjustPrices() {
+        $.getJSON('/cart.js', function(cart) {
+          console.log(cart);
+          cart.items.forEach(function(item) {
+            var $product = $('tr[data-variant-id="' + item.variant_id + '"]');
+            // Hide Line item discount if not through discount
+            var isLineItemScript = item.discounts.length && item.discounts[0].title == '';
+            if (!isLineItemScript) {
+              $product.find('.reduction-code').show();
+            }
+
+            // Show compare at price
+            var productURL = '/products/' + item.handle + '.js';
+            $.getJSON(productURL, function(productData) {
+              var variant = $.grep(productData.variants, function(variant) {
+                return variant.id == item.variant_id;
+              })[0];
+
+              if (isLineItemScript) {
+                var item_compare_at_price = Shopify.formatMoney(variant.compare_at_price, $('body').data('money-format'));            
+                $product.find('.product__price .order-summary__small-text').text(item_compare_at_price);
+              }
+              $product.find('.product__price .order-summary__small-text').show().css('display', 'inline-block');
+            });
+          });
+        });
+      }
+
+      function fixVariantSeparator() {
+        [...document.querySelectorAll('.product__description__variant')].forEach(item => {
+          const options = item.innerHTML.split(' / ');
+
+          for (let i = 0; i < options.length; i++) {
+            const element = options[i];
+            if (element.toLowerCase().includes('mm')) {
+              options.splice(i, 1);
+            }
+          }
+
+          return item.innerHTML = options.join(' | ');
+        });
+      }
+
+      function onElementMutated(p_options) {
+        // expected p_options - selector, callback
+
+        var observer = new MutationObserver(function(mutations) {
+          console.log(mutations);
+          p_options.callback(mutations);
+        });
+
+        // Notify me of everything!
+        var observerConfig = {
+          attributes: true, 
+          childList: true, 
+          characterData: false 
+        };
+
+        // Node, config
+        // In this case we'll listen to all changes to body and child nodes
+        var targetNodes = document.querySelectorAll(p_options.selector);
+        targetNodes.forEach(function(node) {
+          observer.observe(node, observerConfig);
+        });  
+      };  
+
+      $(function() {
+        fixVariantSeparator();
+        onElementMutated({
+          selector: '.sidebar__content',
+          callback: function() {
+            adjustPrices();
+            fixVariantSeparator();
+          }
+        });
+      });
+    })(jQuery);
+  </script>
+    
+	<!-- Route Code Edited 01/23/2020 -->
+    <script type="text/javascript" src="https://cdn.routeapp.io/route-widget-shopify/stable/route-widget-shopify-stable-opt-in.min.js"></script>
+    <style>
+         .route-widget {
+         justify-content: flex-end !important;
+          }
+    </style>
+	<!-- Route Code End -->
+    
+</head>
+  <body data-money-format="{{ shop.money_format }}">
+    {{ skip_to_content_link }}
+    <div class="checkout-infobar" data-header>FREE SHIPPING ON U.S. ORDERS OVER $200</div>
+    <div class="content" data-content>
+      <div class="wrap">
+        <div class="main" role="main">
+          <div class="main__header">
+               <div class="checkout-logo">
+      		     <a href="/#">{{ 'joah-brown-logo.png' | asset_url | img_tag }}</a>
+   			   </div>
+            {{ breadcrumb }}
+            {{ alternative_payment_methods }}
+          </div>
+          <div class="main__content">
+            {{ content_for_layout }}
+          </div>
+          <div class="main__footer">
+            {{ content_for_footer }}
+          </div>
+        </div>
+        <div class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            <div class="mobile-checkout-logo hide-on-desktop">
+      		  <a href="/#">{{ 'joah-brown-logo.png' | asset_url | img_tag }}</a>
+   			</div>
+             <h3 class="section-heading">Summary</h3>
+            {{ content_for_order_summary }}
+            {{ order_summary_toggle }}
+          </div>
+        </div>
+      </div>
+    </div>
+    {{ tracking_code }}
+
+    <script>
+      function addUpLabel(target, label) {
+        var $targetEl = $(target);
+        if ($targetEl) {
+          var template = `<br><span class="small-text">${label}</span>`
+
+          $targetEl.append(template);
+        } else {
+          setTimeout(addUpLabel(target, label), 200);
+        }
+      }
+
+      $(document).on(`page:load page:change`, function(e) {
+        var options = ['[data-shipping-method-label-title="Standard Flat Rate"]', '[data-shipping-method-label-title="Standard Shipping"]'];
+        options.forEach(o => addUpLabel(o, '5-7 business days'));
+      });
+    </script>
+  </body>
+</html>

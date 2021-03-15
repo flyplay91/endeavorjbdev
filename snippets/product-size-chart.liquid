@@ -1,0 +1,74 @@
+{% for option in product.options %}
+  {% if option == 'Size' %}
+    {% assign found_option = true %}
+    {% assign option_index = forloop.index0 %}
+  {% endif %}
+{% endfor %}
+{% for variant in product.variants %}
+  {% if variant.options[option_index] == "One Size" %}
+    {% assign is_one_size = true %}
+  {% endif %}
+{% endfor %}
+{% if is_one_size %}
+<h3>One Size</h3>
+<p>Please see product description for sizing information.</p>
+{% elsif product.tags contains "size-chart-dress" %}
+<h3>Dresses</h3>
+<table class="size-chart">
+  <thead>
+    <tr><th>Size</th><th>US Size</th><th>Waist</th><th>Bust</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>X/S</td><td>0-2</td><td>23-25</td><td>30-32</td></tr>
+    <tr><td>S/M</td><td>4-6</td><td>26-28</td><td>34-36</td></tr>
+    <tr><td>M/L</td><td>8-10</td><td>29-31</td><td>38-40</td></tr>
+  </tbody>
+  <tfoot>
+    <tr><td colspan=3></td><td>Inches</td></tr>
+  </tfoot>
+</table>
+{% elsif product.tags contains "size-chart-form-fitting-top" %}
+<h3>Form-Fitting Tops</h3>
+<table class="size-chart">
+  <thead>
+    <tr><th>Size</th><th>US Size</th><th>Waist</th><th>Bust</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>X/S</td><td>0-2</td><td>23-25</td><td>30-32</td></tr>
+    <tr><td>S/M</td><td>4-6</td><td>26-28</td><td>34-36</td></tr>
+    <tr><td>M/L</td><td>8-10</td><td>29-31</td><td>38-40</td></tr>
+  </tbody>
+  <tfoot>
+    <tr><td colspan=3></td><td>Inches</td></tr>
+  </tfoot>
+</table>
+{% elsif product.tags contains "size-chart-bottom" %}
+<h3>Bottoms</h3>
+<table class="size-chart">
+  <thead>
+    <tr><th>Size</th><th>US Size</th><th>Waist</th><th>Hips</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>X/S</td><td>0-2</td><td>23-25</td><td>34-36</td></tr>
+    <tr><td>S/M</td><td>4-6</td><td>26-28</td><td>37-39</td></tr>
+    <tr><td>M/L</td><td>8-10</td><td>29-31</td><td>40-42</td></tr>
+  </tbody>
+  <tfoot>
+    <tr><td colspan=3></td><td>Inches</td></tr>
+  </tfoot>
+</table>
+{% else %}
+<h3>Tops</h3>
+<table class="size-chart">
+  <thead>
+    <tr><th>Size</th><th>US Size</th><th>Waist</th><th>Bust</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>S/M</td><td>0-4</td><td>23-27</td><td>30-35</td></tr>
+    <tr><td>M/L</td><td>6-10</td><td>27-31</td><td>36-41</td></tr>
+  </tbody>
+  <tfoot>
+    <tr><td colspan=3></td><td>Inches</td></tr>
+  </tfoot>
+</table>
+{% endif %}

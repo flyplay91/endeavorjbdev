@@ -1,0 +1,91 @@
+<div class="section login-panes">    
+  <div class="left-pane">
+    <h3>Not a Member?</h3>
+    <div>
+      {{ section.settings.not_member_description }}
+    </div>
+
+    <div class="actions">
+      <a href="/account/register" class="action_button">Sign Up</a>
+    </div>
+  </div>
+  <div class="right-pane">
+    <h3>{{ 'customer.login.title' | t }}</h3>
+    <div>
+      {{ section.settings.login_description }}
+    </div>
+    {% form 'customer_login', return_to: "/account" %}
+    {{ form.errors | default_errors }}
+    <label for="customer_email">Email</label>
+    <input type="email" value="" name="customer[email]" id="customer_email" class="large" size="30"  autocorrect="off" autocapitalize="off" tabindex="1" />
+
+    {% if form.password_needed %}
+    <label for="customer_password">Password</label>
+    <input type="password" value="" name="customer[password]" id="customer_password" class="large password" size="16" tabindex="2" />
+    {% endif %}
+
+    <div class="note"><a href="#" onclick="showRecoverPasswordForm()">Forgot Password?</a></div>
+
+    <div class="actions">
+      <input class="btn action_button" type="submit" value="Submit" tabindex="3" />
+    </div>
+    {% endform %}
+
+    <div id="recover-password" style='display:none'>
+      <h3>{{ 'customer.recover_password.title' | t }}</h3>
+
+      {% form 'recover_customer_password' %}
+      {{ form.errors | default_errors }}
+
+      {% if form.posted_successfully? %}
+      {% assign reset_success = true %}
+      {% endif %}
+
+      <label for="email" class="large">{{ 'customer.recover_password.email' | t }}</label>
+      <input type="email" value="" size="30" name="email" id="recover-email" class="large" autocorrect="off" autocapitalize="off" />
+
+      <div class="note">{{ 'customer.recover_password.subtext' | t }}</div>
+
+      <div class="action_bottom">
+        <input class="btn action_button" type="submit" value="{{ 'customer.recover_password.submit' | t }}" />
+        <input class="btn action_button" type="button" onclick="hideRecoverPasswordForm()" value="{{ 'customer.recover_password.cancel' | t }}" />
+      </div>
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+  {% schema %}
+  {
+  "name": "Customer Login",
+  "settings": [
+  {
+  "type": "richtext",
+  "label": "Customer login description",
+  "id": "login_description"
+  },
+  {
+  "type": "richtext",
+  "label": "Customer Not Member description",
+  "id": "not_member_description"
+  }
+  ]
+  }
+  {% endschema %}
+
+  {% stylesheet %}
+  {% endstylesheet %}
+
+  {% javascript %}
+  {% endjavascript %}
+
+<script>
+  (function() {
+    document.addEventListener('DOMContentLoaded', function() {
+      var pageHistory = JSON.parse(sessionStorage.getItem('last_page_visited'));
+      if (pageHistory.length) {
+        document.querySelector('[name="return_to"]').setAttribute('value', pageHistory[0]);
+      }
+    });
+  })();
+</script>

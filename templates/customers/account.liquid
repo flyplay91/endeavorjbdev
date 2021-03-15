@@ -1,0 +1,76 @@
+{% paginate customer.orders by 20 %}
+  <div class="page container account-container">
+    <header class="account-header">
+      <div class="account-header-title">
+        <h1>{{ 'customer.account.details' | t }}</h1>
+      </div>
+      <div class="account-header-logout">
+        <span>{{ 'layout.customer.log_out' | t | customer_logout_link }}</span>
+      </div>
+    </header>
+    <div id="customers-account-section" class="section clearfix">
+      <aside class="account-sidebar">
+        <h3 class="name"><a href="/account" title="{{ 'layout.customer.my_account' | t }}">{{ customer.name }}</a></h3>
+        <p class="email note">{{ customer.email }}</p>
+        <h3>{{ 'customer.addresses.primary' | t }}</h3>
+        <div class="address">
+          {% if customer.default_address != nil %}
+            <div>{{ customer.default_address.address1 }}</div>
+            {% if customer.default_address.address2 != "" %}
+              <div>{{ customer.default_address.address2 }}</div>
+            {% endif %}
+            <div>{{ customer.default_address.city}}{% if customer.default_address.province_code %}, {{customer.default_address.province_code}}{% endif %} {{ customer.default_address.zip}}</div>
+            <div>{{customer.default_address.country}}</div>
+            <div>{{ customer.default_address.phone }}</div>
+          {% else %}
+            <p>{{ 'customer.addresses.no_addresses' | t }}</p>
+          {% endif %}
+          {% if customer.addresses.size > 0 %}
+            <a href="/account/addresses" class="address-page__view-addresses">{{ 'customer.account.view_addresses' | t | upcase }} ({{ customer.addresses_count }})</a>
+          {% else %}
+            <div class="action_bottom">
+              <a href="/account/addresses" class="button">{{ 'customer.account.add_address' | t | upcase }}</a>
+            </div>
+          {% endif %}
+        </div>
+      </aside>
+      <main class="account-main">
+        <hr class="mobile">
+        <h3>{{ 'customer.orders.title' | t }}</h3>
+        <div id="customer_orders">
+          {% if customer.orders.size != 0 %}
+          <table>
+            <thead>
+              <tr>
+                <th>{{ 'customer.orders.order_number' | t }}</th>
+                <th>{{ 'customer.orders.date' | t }}</th>
+                <th>{{ 'customer.orders.payment_status' | t }}</th>
+                <th>{{ 'customer.orders.fulfillment_status' | t }}</th>
+                <th>{{ 'customer.orders.total' | t }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in customer.orders %}
+                <tr class="{% cycle 'odd', 'even' %} {% if order.cancelled %}cancelled_order{% endif %}">
+                    <td>{{ order.name | link_to: order.customer_url }}</td>
+                    <td>{{ order.created_at | date: format: "month_day_year" }}</td>
+                    <td>{{ order.financial_status_label }}</td>
+                    <td>{{ order.fulfillment_status_label }}</td>
+                    <td>
+                      <span class="money">{{ order.total_price | money }}</span>
+                    </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+            <p>{{ 'customer.orders.none' | t }}</p>
+          {% endif %}
+        </div>
+        <div class="pagination">
+        {% include 'pagination' with true %}
+        </div>
+      </main>
+    </div>
+  </div>
+{% endpaginate %}

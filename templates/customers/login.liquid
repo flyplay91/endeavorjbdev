@@ -1,0 +1,25 @@
+</div>
+<div id="customers-login-section">
+  {% section 'customer-login' %}
+</div>
+
+<script type="text/javascript">
+    function showRecoverPasswordForm() {
+        document.getElementById('recover-password').style.display = 'block';
+        document.getElementById('customer_login').style.display = 'none';
+        return false;
+    }
+
+    function hideRecoverPasswordForm() {
+        document.getElementById('recover-password').style.display = 'none';
+        document.getElementById('customer_login').style.display = 'block';
+        return false;
+    }
+
+    if (window.location.hash == '#recover') { showRecoverPasswordForm() }
+
+    // reset_success is only true when the reset form is
+    {% if reset_success %}
+    showRecoverPasswordForm();
+    {% endif %}
+</script>

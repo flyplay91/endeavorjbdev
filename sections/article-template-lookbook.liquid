@@ -1,0 +1,293 @@
+<div class="summerlookbook">
+  <div class=" center ">
+    <h1 class="headline">{{ article.title }}</h1>
+  </div>
+    {% if article.metafields.banner.image %}
+  <div class="look_book_banner" style="background:url('{{ article.metafields.banner.image }}') no-repeat; background-position:center;
+  background-size:cover;">
+    
+    <img  src="{{ article.metafields.banner.image }}"
+          class="lazyload"
+          alt="{{ article.metafields.conspire.banner_alt }}"
+          data-sizes="auto"
+          data-src=""/>
+    
+  </div>
+    {% endif %}
+  <div class="container">
+    <div class="main-text">
+        {% if article.metafields.title.text %}
+        <p> {{ article.metafields.title.text }} </p>
+        {% endif %}
+    </div>
+    <div class="sub-text">
+        {% if article.metafields.description.blog %}
+        <p>{{ article.metafields.description.blog }}</p>
+        {% endif %}
+    </div>
+    <div class="lookbook_box">
+          <div class=" one-third column text-column" {{ block.shopify_attributes }}>
+
+            <div class="border-style--{{ article.metafields.onethird.image_colum }} text-align--{{ article.metafields.onethird.image_colum }}">
+                  {% if article.metafields.onethird.image_colum %}
+                  {% if article.metafields.onethird.image_colum != blank %}
+                <p>
+                  <img  src="{{ article.metafields.onethird.image_colum }}"
+                        class="lazyload {{ settings.image_loading_style }}"
+                        alt="{{ article.metafields.conspire.alt_1 }}"
+                        data-sizes="auto"
+                        data-src="{{ article.metafields.onethird.image_colum }}"
+
+                  />
+                </p>
+                <noscript>
+                  <p>
+                      {{ article.metafields.onethird.image_colum | img_url: '480x480', scale: 2 | img_tag: block.settings.image.alt }}
+                  </p>
+                </noscript>
+                {% else %}
+                  <p>
+                      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </p>
+                {% endif %}
+                {% endif %}
+
+            </div>
+          </div>
+        <div class=" one-third column text-column" {{ article.metafields.onethird_2.image_colum2 }}>
+
+            <div class="border-style--{{ article.metafields.onethird_2.image_colum2 }} text-align--{{ article.metafields.onethird_2.image_colum2 }}">
+                    {% if article.metafields.onethird_2.image_colum2 %}
+                    {% if article.metafields.onethird_2.image_colum2 != blank %}
+                    <p>
+                        <img  src="{{ article.metafields.onethird_2.image_colum2 }}"
+                              class="lazyload {{ article.metafields.onethird_2.image_colum2 }}"
+                              alt="{{ article.metafields.conspire.alt_2 }}"
+                              data-sizes="auto"
+                              data-src="{{ article.metafields.onethird_2.image_colum2 }}"
+
+                        />
+                    </p>
+                    <noscript>
+                        <p>
+                            {{ article.metafields.onethird.image_colum | img_url: '480x480', scale: 2 | img_tag: block.settings.image.alt }}
+                        </p>
+                    </noscript>
+                {% else %}
+                    <p>
+                        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </p>
+                {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+        <div class=" one-third column text-column" {{ article.metafields.onethird_3.image_colum3 }}>
+
+            <div class="border-style--{{ article.metafields.onethird_3.image_colum3 }} text-align--{{ article.metafields.onethird_3.image_colum3 }}">
+                    {% if article.metafields.onethird_3.image_colum3 %}
+                    {% if article.metafields.onethird_3.image_colum3 != blank %}
+                    <p>
+                        <img  src="{{ article.metafields.onethird_3.image_colum3 }}"
+                              class="lazyload {{ article.metafields.onethird_3.image_colum3 }}"
+                              alt="{{ article.metafields.conspire.alt_3 }}"
+                              data-sizes="auto"
+                              data-src="{{ article.metafields.onethird_3.image_colum3 }}"
+
+                        />
+                    </p>
+                    <noscript>
+                        <p>
+                            {{ article.metafields.onethird_3.image_colum3 | img_url: '480x480', scale: 2 | img_tag: article.metafields.onethird_3.image_colum3.alt }}
+                        </p>
+                    </noscript>
+                {% else %}
+                    <p>
+                        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </p>
+                {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+        <div class=" two-thirds column text-column" {{ article.metafields.two_3_section2.image_colum5 }}>
+
+            <div class="border-style--{{ article.metafields.two_3_section2.image_colum5 }} text-align--{{ article.metafields.two_3_section2.image_colum5 }}">
+                    {% if article.metafields.two_3_section2.image_colum5 %}
+                    {% if article.metafields.two_3_section2.image_colum5 != blank %}
+                    <p>
+                        <img  src="{{ article.metafields.two_3_section2.image_colum5 }}"
+                              class="lazyload {{ article.metafields.two_3_section2.image_colum5 }}"
+                              alt="{{ article.metafields.conspire.alt_4 }}"
+                              data-sizes="auto"
+                              data-src="{{ article.metafields.two_3_section2.image_colum5 }}"
+
+                        />
+                    </p>
+                    <noscript>
+                        <p>
+                            {{ article.metafields.two_3_section2.image_colum5 | img_url: '480x480', scale: 2 | img_tag: article.metafields.two_3_section2.image_colum5 }}
+                        </p>
+                    </noscript>
+                {% else %}
+                    <p>
+                        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </p>
+                {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+        <div class=" one-third column text-column" {{ article.metafields.onethird_3_section2.image_colum4 }}>
+
+            <div class="border-style--{{ article.metafields.onethird_3_section2.image_colum4 }} text-align--{{ article.metafields.onethird_3_section2.image_colum4 }}">
+                    {% if article.metafields.onethird_3_section2.image_colum4 %}
+                    {% if article.metafields.onethird_3_section2.image_colum4 != blank %}
+                    <p>
+                        <img  src="{{ article.metafields.onethird_3_section2.image_colum4 }}"
+                              class="lazyload {{ article.metafields.onethird_3_section2.image_colum4 }}"
+                              alt="{{ article.metafields.conspire.alt_5 }}"
+                              data-sizes="auto"
+                              data-src="{{ article.metafields.onethird_3_section2.image_colum4 }}"
+
+                        />
+                    </p>
+                    <noscript>
+                        <p>
+                            {{ article.metafields.onethird_3_section2.image_colum4 | img_url: '480x480', scale: 2 | img_tag: article.metafields.onethird_3_section2.image_colum4.alt }}
+                        </p>
+                    </noscript>
+                {% else %}
+                    <p>
+                        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </p>
+                {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+        <div class=" sixteen columns text-column" {{ article.metafields.full_wid_3_section3.image_colum6 }}>
+
+            <div class="border-style--{{ article.metafields.full_wid_3_section3.image_colum6 }} text-align--{{ article.metafields.full_wid_3_section3.image_colum6 }}">
+                    {% if article.metafields.full_wid_3_section3.image_colum6 %}
+                    {% if article.metafields.full_wid_3_section3.image_colum6 != blank %}
+                    <p>
+                        <img  src="{{ article.metafields.full_wid_3_section3.image_colum6 }}"
+                              class="lazyload {{ article.metafields.full_wid_3_section3.image_colum6 }}"
+                              alt="{{ article.metafields.conspire.alt_6 }}"
+                              data-sizes="auto"
+                              data-src="{{ article.metafields.full_wid_3_section3.image_colum6 }}"
+
+                        />
+                    </p>
+                    <noscript>
+                        <p>
+                            {{ article.metafields.full_wid_3_section3.image_colum6 | img_url: '480x480', scale: 2 | img_tag: article.metafields.full_wid_3_section3.image_colum6 }}
+                        </p>
+                    </noscript>
+                {% else %}
+                    <p>
+                        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </p>
+                {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    <div class="Featured-content">
+        <p>{{ article.metafields.middle_description.article }}</p>
+    </div>
+
+
+
+      {%- assign collection = collections[article.metafields.article.collection] -%}
+    <div class="featured-lookbook-product" style="clear:both;">
+        <div class=" center ">
+            <h1 class="headline">{{ collection.title }}</h1>
+        </div>
+        {% for product in collection.products %}
+          <div class="one-third column text-column1">
+            <a href="{{ product.url | within: collection }}">
+                {% if product.featured_image != blank %}
+                    {{ product.featured_image.src | img_url: 'large' | img_tag: product.title }}
+                {% endif %}
+
+
+            </a>
+            <div class="featured-lookbook-text">
+              <p class="featured-lookbook-title">{{ product.title }}</p>
+              <p class="featured-lookbook-price">
+                  {% if product.compare_at_price > product.price %}
+
+                      {% if product.price_varies %}
+                          {%- assign sale_price = product.price | money -%}
+                          {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+                      {% else %}
+                          {{ 'products.product.on_sale' | t }}
+                          {{ product.price | money_without_trailing_zeros }}
+                      {% endif %}
+
+                  {% else %}
+
+                      {% if product.price_varies %}
+                          {%- assign price = product.price | money -%}
+                          {{ 'products.product.from_text_html' | t: price: price }}
+                      {% else %}
+                          {{ product.price | money_without_trailing_zeros }}
+                      {% endif %}
+
+                  {% endif %}
+              </p>
+              <div class="color-count">
+                  {% assign option_index = 0 %}
+                  {% for option in product.options %}
+                      {% capture downcased_option %}{{ option | downcase }}{% endcapture %}
+                      {% assign option_index = forloop.index0 %}
+                      {% assign how_many_options = 0 %}
+                      {% assign current_options = '' %}
+                      {% for variant in product.variants %}
+                          {% for product_option in product.options_with_values %}
+                              {% assign current_option = variant.options[option_index] %}
+                              {% unless current_options contains current_option %}
+                              {% if how_many_options > 0 %}
+                                  {% assign current_options = current_options | join: '|' | append: '|' %}
+                              {% endif %}
+                              {% assign current_options = current_options | append: current_option %}
+                              {% assign current_options = current_options | split: '|' | sort %}
+                              {% assign how_many_options = current_options | size %}
+                              {% endunless %}
+                          {% endfor %}
+                      {% endfor %}
+                      {%comment%}Output the amount of options for each option. Add an 's' if there is more than one available{% endcomment %}
+                      {% if option == 'Color' %}
+                          {% unless option == "Title" %}{{current_options.size}} {{option}}{% if current_options.size > 1 %}s{% endif %}{% unless forloop.last == true %}{% endunless %}{% endunless %}
+                      {% endif %}
+
+                  {% endfor %}
+              </div>
+            </div>
+          </div>
+
+        {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+"name": "Lookbook",
+"settings": [
+
+]
+
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

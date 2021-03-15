@@ -1,0 +1,38 @@
+{% if block.settings.image %}
+{% assign collection_image = block.settings.image %}
+{% assign collection_image_alt = block.settings.image_alt %}
+{% elsif collection.image != blank %}
+{% assign collection_image = collection.image %}
+{% assign collection_image_alt = collection.image.alt %}
+{% else collection.empty? == false %}
+{% assign collection_image = collection.products.first.featured_image %}
+{% endif %}
+<div class="">
+  <a href="{% if collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}" class="collection-grid-item__link">
+    {% unless collection_image == blank %}
+    <div class="lazyload js">
+      <img src="{{ collection_image | img_url: '' }}" alt="{{ collection_image_alt }}">
+    </div>
+    {% else %}
+    {% if collection == empty %}
+    <div class="">
+      {% capture current %}{% cycle 1, 2, 3 %}{% endcapture %}
+      {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+    </div>
+    {% else %}
+    <div class="" style="background-image: url('{{ collection_image | img_url: '1024x1024' }}')"></div>
+    {% endif %}
+    {% endunless %}
+
+    <div class="collection-info__caption">
+      <div class="title">
+        {% if collection != blank %}
+        {% if block.settings.collection_text != "Collection" %} {{ block.settings.collection_text }} {% else %}{{ collection.title }}{% endif %}
+        {% else %}
+        {{ "homepage.onboarding.collection_title" | t }}
+        {% endif %}
+      </div>
+      <p class="featured-btn">{{ block.settings.button }}</p>
+    </div>
+  </a>
+</div>

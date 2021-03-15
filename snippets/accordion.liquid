@@ -1,0 +1,11 @@
+{% for block in blocks %}
+<label class="accordion">
+  <span>{{ block.settings.title }}</span>
+  <span class="icon-plus"></span>
+  <span class="icon-minus hidden"></span>
+</label>
+
+<div class="panel">
+  {{ block.settings.description }}
+</div>
+{% endfor %}

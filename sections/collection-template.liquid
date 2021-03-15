@@ -1,0 +1,211 @@
+{% comment %}
+** Collections - default view **
+- Collection template
+- This builds the low res / static preview for a collection page.
+- All the heavy lifting and dynamic behavior lives in assets/collections.js
+-
+- Don't bother trying to insert hooks / changes in this template or its child snippets!
+- All the HTML built within div#coolie-collection-app is -completely- replaced after DOMContentLoaded 
+{% endcomment %}
+<div class="container">
+  <script>
+    {% comment %} put relevant section settings into a global object so the app script can use them {% endcomment %}
+    window.CoolieScripts = window.CoolieScripts || {}
+    window.CoolieScripts.collectionSidebarBlocks = []
+    {% for block in section.blocks %}
+    window.CoolieScripts.collectionSidebarBlocks.push({{ block.settings | json }})
+    {% endfor %}
+    window.CoolieScripts.collectionNoMatches = {{ 'collections.general.no_matches' | t | json }}
+    window.CoolieScripts.collectionPaginationLimit = {{ section.settings.pagination_limit | json }}
+  </script>
+  {% paginate collection.products by section.settings.pagination_limit %}
+    <div id="collection-title">
+      <p>{{ collection.title }}</p>
+      <div id="collection-description">{{ collection.description }}</div>
+    </div>
+    <div id="coolie-collection-app">
+      <div class="collection-main collection-main--initial">
+        <div class="sidebar four columns"></div>
+      {% if collection.products.size == 0 %}
+        <div class="section collection-grid">
+          <p class="quote">{{ 'collections.general.no_matches' | t }}</p>
+        </div>
+      {% else %}
+        {% comment %}include 'sidebar'{% endcomment %}
+        {% assign products_per_row = section.settings.products_per_row %}
+        {% assign product_found = false %}
+        {% assign skip = false %}
+        {% assign collection_group = products | map: 'id' %}
+        {% assign collection_group_thumb = collection_group | append : 'thumb' %}
+        {% assign collection_group_mobile = collection_group | append : 'mobile' %}
+
+        <div itemtype="http://schema.org/ItemList" id="product-grid" class="twelve columns">
+          <div class="product-grid-content">
+            {% for product in products limit: limit %}
+              {% if product.id == skip_product.id or skip == true %}
+                {% assign product_found = true %}
+              {% else %}
+                {% if forloop.rindex0 == 0 and product_found == false and forloop.length != products.count and template != 'search' and template != 'index' %}
+                  {% assign skip = true %}
+                {% else %}
+                  {% include 'collection-product-thumbnail' %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      </div>
+    </div>
+  {% endpaginate %}
+</div>
+
+{% schema %}
+
+{
+  "name": "Collection",
+  "class": "collection-template-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "pagination_limit",
+      "label": "Products per page",
+      "min": 2,
+      "max": 50,
+      "step": 1,
+      "default": 48
+    },
+    {
+      "type": "checkbox",
+      "id": "display_collection_title",
+      "label": "Show collection title"
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "paragraph",
+      "content": "Create a sidebar by adding content blocks."
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle",
+      "label": "Toggle sidebar content",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "filter_by_collection",
+      "name": "Collection list",
+      "limit": 1
+    },
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "custom_menu_linklist",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "page",
+      "name": "Page",
+      "settings": [
+        {
+          "type": "page",
+          "id": "content_page",
+          "label": "Page"
+        }
+      ]
+    },
+    {
+      "type": "recently_viewed",
+      "name": "Recently viewed products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "To test the recently viewed products, view your online store outside of the Editor and visit multiple product pages ([?](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115008765228))"
+        },
+        {
+          "type": "text",
+          "id": "sidebar_rv_title",
+          "label": "Title",
+          "default": "Recently Viewed"
+        },
+        {
+          "type": "range",
+          "id": "sidebar_rv_per",
+          "label": "Products limit",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 3
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "name": "Tag filter",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "filter_name",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "filter_tags",
+          "label": "Filter tags",
+          "info": "Add a comma-separated list of product tags. Only the tags found in the collection will be displayed as filters ([?](https://help.outofthesandbox.com/hc/en-us/articles/115008642047))"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_filter_swatches",
+          "label": "Display color swatches"
+        }
+      ]
+    },
+    {
+      "type": "filter_by_tag",
+      "name": "Tag list",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Text area can be used for special announcements or general information.</p>"
+        }
+      ]
+    },
+    {
+      "type": "filter_by_type",
+      "name": "Type list",
+      "limit": 1
+    },
+    {
+      "type": "filter_by_vendor",
+      "name": "Vendor list",
+      "limit": 1
+    }
+  ]
+}
+
+{% endschema %}

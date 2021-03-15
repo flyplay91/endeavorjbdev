@@ -1,0 +1,62 @@
+{% comment %}Check for related products and increase limit by one (to offset the currently selected product that is removed from the product loop){% endcomment %}
+{% if related_products == true %}
+  {% assign limit = limit | plus: 0 %}
+  {% assign loop_limit = limit | plus: 1 %}
+{% else %}
+  {% assign limit = limit | plus: 0 %}
+  {% assign loop_limit = limit | plus: 0 %}
+{% endif %}
+
+{% if per_slide != blank %}
+  {% assign visible_products = per_slide %}
+{% else %}
+  {% if section.settings.products_per != blank %}
+    {% assign visible_products = section.settings.products_per | plus: 0 %}
+  {% else %}
+    {% assign visible_products = block.settings.products_per | plus: 0 %}
+  {% endif %}
+{% endif %}
+
+{% if limit <= visible_products %}
+  {% assign products_length = limit %}
+{% else %}
+  {% assign products_length = products.length | minus: 1 %}
+{% endif %}
+
+{% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+<div id="related-products-gallery">
+  {% assign productLength = products | size %}
+  <div class="slider-wrapper owl-carousel">
+    {% for product in products limit: limit %}
+
+    {% if product.id != skip_product.id %}
+    {% assign feature_image = product.featured_image %}
+    <div class="slider-item">
+      <a href="{{ product.url | within: collection }}" itemprop="url">
+        <img src="{{ feature_image | product_img_url: '50x' }}"
+             data-src="{{ image_1200x }}"
+             alt="{{ product.title | escape }}"
+             class="lazyload"
+             srcset="{{ feature_image | product_img_url: "200x" }} 200w,
+                     {{ feature_image | product_img_url: "400x" }} 400w,
+                     {{ feature_image | product_img_url: "600x" }} 600w,
+                     {{ feature_image | product_img_url: "800x" }} 800w,
+                     {{ feature_image | product_img_url: "1200x" }} 1200w"
+             />
+        <div class="product-details">
+          <span class="title" itemprop="name">{{ product.title }}</span>
+          <!--span class="price {% if product.compare_at_price_max > product.price %}sale{% endif %}">
+            <span class="money">{{ product.price_min | money_without_trailing_zeros }}</span>
+            {% if product.compare_at_price_max > product.price %}
+            <span class="was_price">
+              <span class="money">{{ product.compare_at_price_max | money_without_trailing_zeros }}</span>
+            </span>
+            {% endif %}
+          </span-->
+        </div>
+      </a>
+    </div>  
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>

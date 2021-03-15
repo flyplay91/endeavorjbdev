@@ -1,0 +1,184 @@
+<div class="summerlookbook">
+  <div class=" center ">
+    <h1 class="headline">{{ section.settings.title }}</h1>
+  </div>
+  <div class="container">
+  <div class="sixteen columns look_book_banner">
+    <img  src="{{ section.settings.image.src | img_url: 'master' }}"
+         class="lazyload"
+         alt="{{ section.settings.image.alt }}"
+         data-sizes="auto"
+         data-src=""/>
+  </div>
+  </div>
+  <div class="container">
+    <div class="lookbook_box">
+
+      {% for block in section.blocks %}
+      {% case block.settings.width %}
+      {% when '25%' %}
+      {%- assign block_width = 'two columns' -%}
+      {% when '33%' %}
+      {%- assign block_width = 'one-third column' -%}
+      {% when '50%' %}
+      {%- assign block_width = 'eight columns' -%}
+      {% when '66%' %}
+      {%- assign block_width = 'two-thirds column' -%}
+      {% when '75%' %}
+      {%- assign block_width = 'thirteen columns alpha' -%}
+      {% when '100%' %}
+      {%- assign block_width = 'sixteen columns' -%}
+      {% endcase %}
+      <div class="{{ block_width }} text-column" {{ block.shopify_attributes }}>
+
+        <div class="border-style--{{ block.settings.border_style }} text-align--{{ block.settings.align_text }}">
+          <a href="{{ block.settings.button_link }}">
+            {% if block.settings.enable_image %}
+            {% if block.settings.image != blank %}
+              {% if block.settings.image %}
+              <img  src="{{ block.settings.image.src | img_url: 'large' }}"
+                   class="lazyload {{ settings.image_loading_style }}"
+                   alt="{{ block.settings.image.alt }}"
+                   data-sizes="auto"
+                   data-src="{{ block.settings.image | img_url }}"
+                   data-srcset=" {{ block.settings.image | img_url: '2048x' }} 2048w,
+                                {{ block.settings.image | img_url: '1200x' }} 1200w,
+                                {{ block.settings.image | img_url: '1000x' }} 1000w,
+                                {{ block.settings.image | img_url: '800x' }} 800w,
+                                {{ block.settings.image | img_url: '600x' }} 600w,
+                                {{ block.settings.image | img_url: '400x' }} 400w"
+                   />
+              {% endif %}
+           
+          </a>
+          <div class="blog-content">
+            <h2>{{ block.settings.text1 }}</h2>
+            <a href="{{ block.settings.button_link }}"class="action_button continue-button">{{ block.settings.text2 }}</a>
+          </div>
+          {% else %}
+          <p>
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          </p>
+          {% endif %}
+          {% endif %}
+
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+	<div class="Featured-content">
+      {{ section.settings.text3 }}
+    </div>
+    
+    <div class=" center ">
+      <h1 class="headline">{{ section.settings.title2 }}</h1>
+    </div>
+    
+      
+
+    </div>
+  </div>
+
+
+
+{% schema %}
+  {
+    "name": "Featured Lookbooks Page",
+    "settings": [
+	{
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Heading"
+      },
+     {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Banner image",
+        "info": "1600 x 600px recommended"
+      },
+     
+     {
+        "type": "url",
+        "id": "link",
+        "label": "Featured image link"
+      }
+     
+   ],
+
+"blocks": [
+      {
+        "type": "blog",
+        "name": "Column",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "enable_image",
+            "label": "Show image",
+            "default": true
+          },
+            {
+            "type": "select",
+            "id": "width",
+            "label": "Container width",
+            "default": "50%",
+            "options": [
+            {
+            "value": "25%",
+            "label": "25%"
+            },
+            {
+            "value": "33%",
+            "label": "33%"
+            },
+            {
+            "value": "50%",
+            "label": "50%"
+            },
+            {
+            "value": "66%",
+            "label": "66%"
+            },
+            {
+            "value": "75%",
+            "label": "75%"
+            },
+            {
+            "value": "100%",
+            "label": "100%"
+            }
+            ]
+            },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+          "type": "richtext",
+          "id": "text1",
+          "label": "Main Text"
+          },
+          {
+          "type": "text",
+          "id": "text2",
+          "label": "Button Text"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Button link"
+          }
+          
+        ]
+      }
+    ]
+
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

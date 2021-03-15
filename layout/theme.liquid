@@ -1,0 +1,274 @@
+{% capture content %}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="{{ shop.locale }}"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="{{ shop.locale }}"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="{{ shop.locale }}"> <![endif]-->
+<!--[if IE 9 ]><html class="ie ie9" lang="{{ shop.locale }}"> <![endif]-->
+<!--[if (gte IE 10)|!(IE)]><!-->
+<html lang="{{ shop.locale }}" {% if template contains "cart" %} style="background-color:#fff;"{% endif %}> <!--<![endif]-->
+<head>
+  <meta name="google-site-verification" content="B187ciZKLXm-cUoXlEi5bLFyuhKRJo8irQC1AAJt1ss" />
+  <meta charset="utf-8">
+  <meta http-equiv="cleartype" content="on">
+
+  <meta name="robots" content="index,follow">
+  <link rel="preconnect" href="https://s3-us-west-2.amazonaws.com">
+  <link rel="preconnect" href="https://connect.facebook.net">
+  <link rel="preconnect" href="https://www.facebook.com">
+  <link rel="preconnect" href="https://use.typekit.net">
+  <link rel="preconnect" href="https://api.instagram.com">
+  <link rel="preconnect" href="https://smart.wdsapp.com">
+  <link rel="preconnect" href="https://unpkg.com">
+
+  {% if template contains "product" %}
+    <meta class="swiftype" name="title" data-type="string" content="{{ product.title }}" />
+  {% endif %}
+  <meta class="swiftype" name="page-type" data-type="string" content="{% if template contains product %}product{% elsif template == 'index' %}index{% elsif template contains 'page' %}page{% endif %}" />
+  <!-- Custom- Fonts -->
+  {% if settings.logo_font contains 'Google' or settings.headline_font contains 'Google' or settings.nav_font contains 'Google' or settings.slideshow_subtitle_font contains 'Google' or settings.slideshow_headline_font contains 'Google' or settings.regular_font contains 'Google' %}
+  <link href="//fonts.googleapis.com/css?family=.|{% if settings.logo_font contains 'Google' %}{{ settings.logo_font | replace: 'Google_', '' | replace: "'", "" }}:light,normal,bold|{% endif %}{% if settings.headline_font contains 'Google' %}{{ settings.headline_font | replace: 'Google_', '' | replace: "'", "" }}:light,normal,bold|{% endif %}{% if settings.nav_font contains 'Google' %}{{ settings.nav_font | replace: 'Google_', '' | replace: "'", "" }}:light,normal,bold|{% endif %}{% if settings.slideshow_headline_font contains 'Google' %}{{ settings.slideshow_headline_font | replace: 'Google_', '' | replace: "'", "" }}:light,normal,bold|{% endif %}{% if settings.slideshow_subtitle_font contains 'Google' %}{{ settings.slideshow_subtitle_font | replace: 'Google_', '' | replace: "'", "" }}:light,normal,bold|{% endif %}{% if settings.regular_font contains 'Google' %}{{ settings.regular_font | replace: 'Google_', '' | replace: "'", "" }}:light,normal,bold{% endif %}" rel="stylesheet" type="text/css" defer />
+  {% endif %}
+  
+  <!-- Swiper Slider -->
+  <!-- load *before* main stylesheet so styles can be overridden! -->
+  {% unless template contains "collection" %}
+  <link rel="stylesheet" href="https://unpkg.com/swiper@5.4.5/css/swiper.min.css" defer />
+  <script src="https://unpkg.com/swiper@5.4.5/js/swiper.min.js" defer></script>
+  {% endunless %}
+  
+  <!-- URW-DIN Web Font  -->
+  <link rel="stylesheet" href="https://use.typekit.net/vip1bac.css" />
+  
+  <!-- selectric default styles -->
+
+  <link rel="stylesheet" href="{{ 'selectric.css' | asset_url }}" defer />
+  
+  <!-- Owl Slider -->
+  <link rel="stylesheet" href="{{ 'owl.carousel.css' | asset_url  }}" defer />
+  
+  <!-- main stylesheet -->
+  <link rel="stylesheet" href="{{ 'styles.scss.css' | asset_url }}" defer />
+
+  <link rel="stylesheet" href="{{ 'customs.scss.css' | asset_url }}" defer />
+  
+  <script>
+  /*! lazysizes - v5.2.0-beta1 */
+  !function(a,b){var c=b(a,a.document);a.lazySizes=c,"object"==typeof module&&module.exports&&(module.exports=c)}("undefined"!=typeof window?window:{},function(a,b){"use strict";var c,d;if(function(){var b,c={lazyClass:"lazyload",loadedClass:"lazyloaded",loadingClass:"lazyloading",preloadClass:"lazypreload",errorClass:"lazyerror",autosizesClass:"lazyautosizes",srcAttr:"data-src",srcsetAttr:"data-srcset",sizesAttr:"data-sizes",minSize:40,customMedia:{},init:!0,expFactor:1.5,hFac:.8,loadMode:2,loadHidden:!0,ricTimeout:0,throttleDelay:125};d=a.lazySizesConfig||a.lazysizesConfig||{};for(b in c)b in d||(d[b]=c[b])}(),!b||!b.getElementsByClassName)return{init:function(){},cfg:d,noSupport:!0};var e=b.documentElement,f=a.Date,g=a.HTMLPictureElement,h="addEventListener",i="getAttribute",j=a[h],k=a.setTimeout,l=a.requestAnimationFrame||k,m=a.requestIdleCallback,n=/^picture$/i,o=["load","error","lazyincluded","_lazyloaded"],p={},q=Array.prototype.forEach,r=function(a,b){return p[b]||(p[b]=new RegExp("(\\s|^)"+b+"(\\s|$)")),p[b].test(a[i]("class")||"")&&p[b]},s=function(a,b){r(a,b)||a.setAttribute("class",(a[i]("class")||"").trim()+" "+b)},t=function(a,b){var c;(c=r(a,b))&&a.setAttribute("class",(a[i]("class")||"").replace(c," "))},u=function(a,b,c){var d=c?h:"removeEventListener";c&&u(a,b),o.forEach(function(c){a[d](c,b)})},v=function(a,d,e,f,g){var h=b.createEvent("Event");return e||(e={}),e.instance=c,h.initEvent(d,!f,!g),h.detail=e,a.dispatchEvent(h),h},w=function(b,c){var e;!g&&(e=a.picturefill||d.pf)?(c&&c.src&&!b[i]("srcset")&&b.setAttribute("srcset",c.src),e({reevaluate:!0,elements:[b]})):c&&c.src&&(b.src=c.src)},x=function(a,b){return(getComputedStyle(a,null)||{})[b]},y=function(a,b,c){for(c=c||a.offsetWidth;c<d.minSize&&b&&!a._lazysizesWidth;)c=b.offsetWidth,b=b.parentNode;return c},z=function(){var a,c,d=[],e=[],f=d,g=function(){var b=f;for(f=d.length?e:d,a=!0,c=!1;b.length;)b.shift()();a=!1},h=function(d,e){a&&!e?d.apply(this,arguments):(f.push(d),c||(c=!0,(b.hidden?k:l)(g)))};return h._lsFlush=g,h}(),A=function(a,b){return b?function(){z(a)}:function(){var b=this,c=arguments;z(function(){a.apply(b,c)})}},B=function(a){var b,c=0,e=d.throttleDelay,g=d.ricTimeout,h=function(){b=!1,c=f.now(),a()},i=m&&g>49?function(){m(h,{timeout:g}),g!==d.ricTimeout&&(g=d.ricTimeout)}:A(function(){k(h)},!0);return function(a){var d;(a=!0===a)&&(g=33),b||(b=!0,d=e-(f.now()-c),d<0&&(d=0),a||d<9?i():k(i,d))}},C=function(a){var b,c,d=99,e=function(){b=null,a()},g=function(){var a=f.now()-c;a<d?k(g,d-a):(m||e)(e)};return function(){c=f.now(),b||(b=k(g,d))}},D=function(){var g,m,o,p,y,D,F,G,H,I,J,K,L=/^img$/i,M=/^iframe$/i,N="onscroll"in a&&!/(gle|ing)bot/.test(navigator.userAgent),O=0,P=0,Q=0,R=-1,S=function(a){Q--,(!a||Q<0||!a.target)&&(Q=0)},T=function(a){return null==K&&(K="hidden"==x(b.body,"visibility")),K||!("hidden"==x(a.parentNode,"visibility")&&"hidden"==x(a,"visibility"))},U=function(a,c){var d,f=a,g=T(a);for(G-=c,J+=c,H-=c,I+=c;g&&(f=f.offsetParent)&&f!=b.body&&f!=e;)(g=(x(f,"opacity")||1)>0)&&"visible"!=x(f,"overflow")&&(d=f.getBoundingClientRect(),g=I>d.left&&H<d.right&&J>d.top-1&&G<d.bottom+1);return g},V=function(){var a,f,h,j,k,l,n,o,q,r,s,t,u=c.elements;if((p=d.loadMode)&&Q<8&&(a=u.length)){for(f=0,R++;f<a;f++)if(u[f]&&!u[f]._lazyRace)if(!N||c.prematureUnveil&&c.prematureUnveil(u[f]))ba(u[f]);else if((o=u[f][i]("data-expand"))&&(l=1*o)||(l=P),r||(r=!d.expand||d.expand<1?e.clientHeight>500&&e.clientWidth>500?500:370:d.expand,c._defEx=r,s=r*d.expFactor,t=d.hFac,K=null,P<s&&Q<1&&R>2&&p>2&&!b.hidden?(P=s,R=0):P=p>1&&R>1&&Q<6?r:O),q!==l&&(D=innerWidth+l*t,F=innerHeight+l,n=-1*l,q=l),h=u[f].getBoundingClientRect(),(J=h.bottom)>=n&&(G=h.top)<=F&&(I=h.right)>=n*t&&(H=h.left)<=D&&(J||I||H||G)&&(d.loadHidden||T(u[f]))&&(m&&Q<3&&!o&&(p<3||R<4)||U(u[f],l))){if(ba(u[f]),k=!0,Q>9)break}else!k&&m&&!j&&Q<4&&R<4&&p>2&&(g[0]||d.preloadAfterLoad)&&(g[0]||!o&&(J||I||H||G||"auto"!=u[f][i](d.sizesAttr)))&&(j=g[0]||u[f]);j&&!k&&ba(j)}},W=B(V),X=function(a){var b=a.target;if(b._lazyCache)return void delete b._lazyCache;S(a),s(b,d.loadedClass),t(b,d.loadingClass),u(b,Z),v(b,"lazyloaded")},Y=A(X),Z=function(a){Y({target:a.target})},$=function(a,b){try{a.contentWindow.location.replace(b)}catch(c){a.src=b}},_=function(a){var b,c=a[i](d.srcsetAttr);(b=d.customMedia[a[i]("data-media")||a[i]("media")])&&a.setAttribute("media",b),c&&a.setAttribute("srcset",c)},aa=A(function(a,b,c,e,f){var g,h,j,l,m,p;(m=v(a,"lazybeforeunveil",b)).defaultPrevented||(e&&(c?s(a,d.autosizesClass):a.setAttribute("sizes",e)),h=a[i](d.srcsetAttr),g=a[i](d.srcAttr),f&&(j=a.parentNode,l=j&&n.test(j.nodeName||"")),p=b.firesLoad||"src"in a&&(h||g||l),m={target:a},s(a,d.loadingClass),p&&(clearTimeout(o),o=k(S,2500),u(a,Z,!0)),l&&q.call(j.getElementsByTagName("source"),_),h?a.setAttribute("srcset",h):g&&!l&&(M.test(a.nodeName)?$(a,g):a.src=g),f&&(h||l)&&w(a,{src:g})),a._lazyRace&&delete a._lazyRace,t(a,d.lazyClass),z(function(){var b=a.complete&&a.naturalWidth>1;p&&!b||(b&&s(a,"ls-is-cached"),X(m),a._lazyCache=!0,k(function(){"_lazyCache"in a&&delete a._lazyCache},9)),"lazy"==a.loading&&Q--},!0)}),ba=function(a){if(!a._lazyRace){var b,c=L.test(a.nodeName),e=c&&(a[i](d.sizesAttr)||a[i]("sizes")),f="auto"==e;(!f&&m||!c||!a[i]("src")&&!a.srcset||a.complete||r(a,d.errorClass)||!r(a,d.lazyClass))&&(b=v(a,"lazyunveilread").detail,f&&E.updateElem(a,!0,a.offsetWidth),a._lazyRace=!0,Q++,aa(a,b,f,e,c))}},ca=C(function(){d.loadMode=3,W()}),da=function(){3==d.loadMode&&(d.loadMode=2),ca()},ea=function(){if(!m){if(f.now()-y<999)return void k(ea,999);m=!0,d.loadMode=3,W(),j("scroll",da,!0)}};return{_:function(){y=f.now(),c.elements=b.getElementsByClassName(d.lazyClass),g=b.getElementsByClassName(d.lazyClass+" "+d.preloadClass),j("scroll",W,!0),j("resize",W,!0),j("pageshow",function(a){if(a.persisted){var c=b.querySelectorAll("."+d.loadingClass);c.length&&c.forEach&&l(function(){c.forEach(function(a){a.complete&&ba(a)})})}}),a.MutationObserver?new MutationObserver(W).observe(e,{childList:!0,subtree:!0,attributes:!0}):(e[h]("DOMNodeInserted",W,!0),e[h]("DOMAttrModified",W,!0),setInterval(W,999)),j("hashchange",W,!0),["focus","mouseover","click","load","transitionend","animationend"].forEach(function(a){b[h](a,W,!0)}),/d$|^c/.test(b.readyState)?ea():(j("load",ea),b[h]("DOMContentLoaded",W),k(ea,2e4)),c.elements.length?(V(),z._lsFlush()):W()},checkElems:W,unveil:ba,_aLSL:da}}(),E=function(){var a,c=A(function(a,b,c,d){var e,f,g;if(a._lazysizesWidth=d,d+="px",a.setAttribute("sizes",d),n.test(b.nodeName||""))for(e=b.getElementsByTagName("source"),f=0,g=e.length;f<g;f++)e[f].setAttribute("sizes",d);c.detail.dataAttr||w(a,c.detail)}),e=function(a,b,d){var e,f=a.parentNode;f&&(d=y(a,f,d),e=v(a,"lazybeforesizes",{width:d,dataAttr:!!b}),e.defaultPrevented||(d=e.detail.width)&&d!==a._lazysizesWidth&&c(a,f,e,d))},f=function(){var b,c=a.length;if(c)for(b=0;b<c;b++)e(a[b])},g=C(f);return{_:function(){a=b.getElementsByClassName(d.autosizesClass),j("resize",g)},checkElems:g,updateElem:e}}(),F=function(){!F.i&&b.getElementsByClassName&&(F.i=!0,E._(),D._())};return k(function(){d.init&&F()}),c={cfg:d,autoSizer:E,loader:D,init:F,uP:w,aC:s,rC:t,hC:r,fire:v,gW:y,rAF:z}});
+  </script>
+
+  {% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %}{% endif %}
+  <title>{% if template contains "index" %}{{ page_title }}{% else %}{{ page_title }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}{% endif %}{% unless page_title contains shop.name %} - {{ shop.name }}{% endunless %}{% endif %}</title>
+
+  {% if page_description %}
+  <meta name="description" content="{{ page_description | escape }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags | escape }}.{% endif %}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}.{% endif %}" />
+  {% endif %}
+
+  {% include 'social-meta-info' %}
+  {% if collection.previous_product %}<link rel="prev" href="{{ collection.previous_product }}">{% endif %}
+  {% if collection.next_product %}<link rel="next" href="{{ collection.next_product }}">{% endif %}
+
+  <!-- Mobile Specific Metas -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="{{ settings.shop_bg_color }}">
+  
+  {% if settings.favicon != nil %}
+  <link rel="shortcut icon" type="image/x-icon" href="{{ settings.favicon | img_url: '32x32' }}">
+  {% else %}
+  <link rel="shortcut icon" type="image/x-icon" href="{{ 'JB-favicon.png' | asset_url }}">
+  {% endif %}
+  <link rel="canonical" href="{{ canonical_url }}" />
+
+  
+  {% if template contains 'customers' %}
+    {{ "shopify_common.js" | shopify_asset_url | script_tag }}
+    {{ "customer_area.js"  | shopify_asset_url | script_tag }}
+    {% endif %}
+
+  {{ content_for_header }}
+  
+  <link href="{{ 'bold-brain-widget.css' | asset_url }}" rel="stylesheet" defer />
+  
+  <script src="{{ 'jquery.min.js' | asset_url }}"></script>
+  
+  <!-- Owl Slider -->
+    <script src="{{ 'owl.carousel.js' | asset_url }}"></script>
+
+  
+  <script src="{{ 'cycle.bundle.js' | asset_url }}"></script>
+  
+  <!-- bag module script -->
+  {% unless template contains 'cart' %}
+  <script src="{{ "mini-cart.js" | asset_url }}" defer></script>
+  {% endunless %}
+  <!-- end bag module -->
+  
+  <script src="{{ 'api.jquery.js' | shopify_asset_url }}" defer></script>
+  
+  <script src="{{ 'jquery.selectric.min.js' | asset_url }}" defer></script>  
+  
+  <!-- FREE PRODUCT PROMO SNIPPET -->
+  <!-- this has to load before other scripts, which depend on the promo product being available -->
+  {% assign promo_product = all_products[settings.free_product_promo_product] %}
+  {% include "free-product-promo" with promo_product %}
+  <!-- END FREE PRODUCT PROMO SNIPPET -->
+  <script src="{{ 'app.js' | asset_url }}" defer></script>
+  
+  
+  {% if template contains "collection" %}
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="{{ 'collections.js' | asset_url }}" defer></script>
+  {% endif %}
+  {% if template contains "product" %}
+    <script src="{{ 'product.js' | asset_url }}" defer></script>
+  {% endif %}
+  
+  {%- include 'bold-common' -%}
+  
+
+  {% include 'visely-search-head-includes' %}
+
+
+  {% include 'visely-script-includes' %}
+
+  <script>
+    if (window.location.pathname.includes('/a/returns')) {
+      var link = document.createElement('meta');
+      link.setAttribute('property', 'og:image');
+      link.content = '//cdn.shopify.com/s/files/1/0261/8853/files/joah-brown-logo_400x_d12e0bdb-b067-4242-a6e1-f0360c1e8c6c_400x-1_400x.png';
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
+  </script>
+  
+   <script type="application/javascript" async 
+	 src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=T823cF"></script>
+</head>
+{% if template contains "index" %}
+{% assign feature_image = true %}
+{% elsif template contains "collection" %}
+{% assign feature_image = true %}
+{% elsif template contains "blog" %}
+{% assign feature_image = true %}
+{% elsif template contains "article" %}
+{% assign feature_image = true %}
+{% elsif template contains "contact" %}
+{% assign feature_image = true %}
+{% elsif template contains "product" %}
+{% assign feature_image = true %}
+{% elsif template contains "gallery" %}
+{% assign feature_image = true %}
+{% elsif template contains "banner" %}
+{% assign feature_image = true %}
+{% elsif template contains "details" %}
+{% assign feature_image = true %}
+{% elsif template contains "faq" %}
+{% assign feature_image = true %}
+{% elsif template contains "search" %}
+{% assign feature_image = true %}
+{% else %}
+{% assign feature_image = false %}
+{% endif %}
+
+<body class="{{ template | replace: '.', '-' | handle }} gridlock" data-money-format="{{ shop.money_format }}">
+  <div class="outer-wrap">
+    {% section 'header' %}
+
+    {{ content_for_layout }}
+
+    {% unless template contains 'index' or settings.secondary_newsletter_banner == false %}
+    {% section 'newsletter' %}
+    {% endunless %}
+
+    {% section 'footer' %}
+
+    {% if settings.size_chart != blank %}
+    {% include 'popup-size-chart' %}
+    {% endif %}
+    {% if settings.newsletter_popup %}
+    {% include 'popup-newsletter' %}
+    {% endif %}
+    {% if settings.quick_shop_enabled %}
+    {% include 'popup-quick-shop' %}
+    {% endif %}
+    {% if settings.disqus_enabled %}
+    {% if template contains "blog" or template contains "article" or template contains "index" %}
+    <script id="dsq-count-scr" src="//{{ settings.disqus_shortname }}.disqus.com/count.js" defer></script>
+    {% endif %}
+    {% endif %}
+
+
+    <!-- CONSPIRE CUSTOM CROSS SELL -->
+    {% if template == "product" %}
+      {% include 'cross-sell-custom' %}
+    {% endif %}
+    <!-- END CUSTOM CROSS-SELL -->
+
+    {% if settings.show_multiple_currencies %}
+    {% include 'currencies' %}
+    {% endif %}
+    {% if settings.show_shipping_calculator and template contains "cart" %}
+      {% include 'cart-shipping-scripts' %}
+    {% endif %}
+    {% unless settings.performance == "sport" or template contains "customer" %}
+    <script src="{{ 'instantclick.min.js' | asset_url }}" data-no-instant defer></script>
+
+    <script data-no-instant>
+      function inIframe() {
+        try {
+          return window.self !== window.top;
+        } catch (e) {
+          return true;
+        }
+      }
+
+      if (!inIframe()){
+        InstantClick.on('change', function() {
+
+          $('head script[src*="shopify"]').each(function() {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = $(this).attr('src');
+
+            $('body').append( script );
+          });
+
+          $('html').removeClass('remodal-is-locked');
+
+        });
+        InstantClick.init();
+      }
+    </script>
+    {% endunless %}
+    <script type="text/javascript" src="{{ 'browser.js' | asset_url }}"></script>
+    <script>
+      {{ settings.custom_scripts }}
+      
+      {% unless template contains "collection" %}
+        sessionStorage.setItem('referer-url', window.location.pathname);
+      {% endunless %}
+
+      {% unless template contains "product" %}
+        {% unless template contains "collection" %}
+          sessionStorage.setItem('collection-scroll', 0);
+        {% endunless %}
+      {% endunless %}
+      
+      // Keep track of page location, used to redirect to right after registration
+      if(window.location.pathname.indexOf('/account/') === -1) {
+        var pageHistory = JSON.parse(sessionStorage.getItem('last_page_visited')) || [];
+        pageHistory.unshift(window.location.pathname);
+        sessionStorage.setItem('last_page_visited', JSON.stringify(pageHistory));
+      }
+    </script>
+  </div>
+
+<!-- Back in Stock helper snippet -->
+{% render 'back-in-stock-helper' %}
+<!-- End Back in Stock helper snippet -->
+</body>
+</html>
+{% endcapture %}
+{% assign content = content | replace_first: '<!DOCTYPE', '!DOCTYPE' | split: ' <' %}
+{% for html in content %}{% assign htmlblock = html | strip | prepend: ' <' %}{{htmlblock | replace: ' </', '</'}}{% endfor %}

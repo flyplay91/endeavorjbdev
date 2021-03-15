@@ -1,0 +1,243 @@
+{% comment %}
+** Featured promotions - homepage partial **
+- Draggable section
+- Uses blocks
+{% endcomment %}
+
+{% assign featured_promos_per_row = section.settings.featured_promos_per_row | minus: 0 %}
+{% assign featured_promos_grid = section.settings.featured_promos_grid %}
+{% assign title_on_image = section.settings.promo_text_on_image_enabled %}
+
+{% if section.blocks.size > 0 %}
+<div  class="js-featured-promotions featured-promotion-group"
+     data-promo-animation="{{ section.settings.featured_links_animation }}">
+  {% for block in section.blocks %}
+
+
+  {% case block.settings.width %}
+  {% when '25%' %}
+  {%- assign block_width = 'one-quarter' -%}
+  {% when '33%' %}
+  {%- assign block_width = 'one-third' -%}
+  {% when '50%' %}
+  {%- assign block_width = 'one-half' -%}
+  {% when '66%' %}
+  {%- assign block_width = 'two-thirds' -%}
+  {% when '75%' %}
+  {%- assign block_width = 'three-quarters' -%}
+  {% when '100%' %}
+  {%- assign block_width = 'full-width' -%}
+  {% endcase %}
+
+  <div class="featured-item featured-item--{{ block.type }} featured-item--{{ block.id }} {{ block_width }} {% if block.settings.alignment %}align--{{ block.settings.alignment }}{% endif %}" {{ block.shopify_attributes }}>
+    {% case block.type %}
+    {% when 'image' %}
+    <figure class="feature-section feature-style--{{ section.settings.feature_style }} section-{{ forloop.index }} promo-{{ forloop.index }} title-overlay-{{ title_on_image }} {% if section.settings.featured_links_animation != blank %}promo-animation--true{% endif %}" {{ block.shopify_attributes }}>
+        {% if block.settings.image != nil %}
+        <img  {% if forloop.index < 3 %} src="{{ block.settings.image | img_url: '600x' }}" {% endif %}
+             alt="{% if block.settings.image.alt != blank %}{{ block.settings.image.alt }}{% else %}{{ block.settings.image_alt | escape }}{% endif %}"
+             class="lazyload full-width-image {{ settings.image_loading_style }}"
+             data-sizes="auto"
+             data-src="{{ block.settings.image | img_url: '1600x', format: 'pjpg' }}"
+             data-srcset=" {{ block.settings.image | img_url: '240x', format: 'pjpg' }} 240w,
+                          {{ block.settings.image | img_url: '480x', format: 'pjpg' }} 480w,
+                          {{ block.settings.image | img_url: '600x', format: 'pjpg' }} 600w,
+                          {{ block.settings.image | img_url: '800x', format: 'pjpg' }} 800w,
+                          {{ block.settings.image | img_url: '900x', format: 'pjpg' }} 900w,
+                          {{ block.settings.image | img_url: '1000x', format: 'pjpg' }} 1000w,
+                          {{ block.settings.image | img_url: '1600x', format: 'pjpg' }} 1600w"
+
+             />
+          {% if block.settings.mobile_image != nil %}
+          <img {% if forloop.index < 3 %} src="{{ block.settings.mobile_image | img_url: '240x' }}" {% endif %}
+               data-src="{{ block.settings.mobile_image | img_url: '1000x' }}"
+               alt="{% if block.settings.image.alt != blank %}{{ block.settings.image.alt }}{% else %}{{ block.settings.title | escape }}{% endif %}"
+               class="lazyload mobile-image" />
+          {% else %}
+          <img {% if forloop.index < 3 %} src="{{ block.settings.image | img_url: '240x' }}" {% endif %}
+               data-src="{{ block.settings.image | img_url: '1000x' }}"
+               alt="{% if block.settings.image.alt != blank %}{{ block.settings.image.alt }}{% else %}{{ block.settings.title | escape }}{% endif %}"
+               class="lazyload mobile-image" />
+          {% endif %}
+        {% else %}
+        {% capture i %}{% cycle "1", "2", "3", "4", "5", "6" %}{% endcapture %}
+        {{ 'collection-' | append: i | placeholder_svg_tag: 'placeholder-svg placeholder-svg--promotions' }}
+        {% endif %}
+        {% if block.settings.text != blank or block.settings.button_label != blank or block.settings.title != blank and title_on_image != blank %}
+        <figcaption class="feature-overlay">
+          <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %}class="link-promo"></a>
+          {% if block.settings.title != blank %}
+          <h2 class="title">{{ block.settings.title }}</h2>
+          {% endif %}
+          {% unless block.settings.text == blank and block.settings.button_label == blank %}
+          <div class="details">
+            {% if block.settings.button_label != blank %}
+            <span class="button">{{ block.settings.button_label }}</span>
+            {% endif %}
+            {% if block.settings.text != blank %}
+            <p class="description">{{ block.settings.text }}</p>
+            {% endif %}
+          </div>
+          {% endunless %}
+        </figcaption>
+        {% elsif block.settings.link != blank %}
+        <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %}class="link-promo"></a>
+        {% endif %}
+      {% if title_on_image == blank %}
+      {% if block.settings.title != blank %}
+      <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %}>
+        <h2 class="title title-below">{{ block.settings.title }}</h2>
+      </a>
+      {% endif %}
+      {% endif %}
+    </figure>
+    {% endcase %}
+  </div>
+  {% endfor %}
+</div><!-- /.js-featured-promotions -->
+{% endif %}
+
+{% schema %}
+{
+"name": "Featured promotions",
+"class": "featured-promotions-section",
+"max_blocks": 12,
+"settings": [
+{
+"type": "select",
+"id": "featured_links_animation",
+"label": "Promotions animation",
+"options": [
+{
+"value": "",
+"label": "None"
+},
+{
+"value": "fadeIn",
+"label": "Fade In"
+},
+{
+"value": "fadeInUp",
+"label": "Fade Up"
+},
+{
+"value": "fadeInDown",
+"label": "Fade Down"
+}
+],
+"default": "fadeInDown"
+},
+{
+"type": "checkbox",
+"id": "promo_text_on_image_enabled",
+"label": "Show title on image",
+"default": true
+}
+],
+"blocks": [
+{
+"type": "image",
+"name": "Promotion",
+"settings": [
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image",
+"info": "840 x 840px recommended"
+},
+{
+"type": "image_picker",
+"id": "mobile_image",
+"label": "Mobile Image",
+"info": "840 x 840px recommended"
+},
+{
+"type": "url",
+"id": "link",
+"label": "Link"
+},
+{
+"type": "text",
+"id": "image_alt",
+"label": "Alt Text",
+"default": "Joah Brown"
+},
+{
+"type": "text",
+"id": "title",
+"label": "Header",
+"default": "Feature"
+},
+{
+"type": "richtext",
+"id": "text",
+"label": "Text",
+"default": "<p>Promotion description details.</p>"
+},
+{
+"type": "text",
+"id": "button_label",
+"label": "Button label"
+},
+{
+"type": "select",
+"id": "width",
+"label": "Container width",
+"default": "50%",
+"options": [
+{
+"value": "25%",
+"label": "25%"
+},
+{
+"value": "33%",
+"label": "33%"
+},
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "66%",
+"label": "66%"
+},
+{
+"value": "75%",
+"label": "75%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+}
+]
+}
+],
+"presets": [{
+"name": "Featured images",
+"category": "Image",
+"blocks": [
+{
+"type": "image",
+"settings": {
+
+}
+},
+{
+"type": "image",
+"settings": {
+
+}
+},
+{
+"type": "image",
+"settings": {
+
+}
+}
+]
+}]
+}
+
+{% endschema %}

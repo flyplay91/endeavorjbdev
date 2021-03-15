@@ -1,0 +1,82 @@
+<script defer>
+(function() {
+  window.CoolieScripts = window.CoolieScripts || {}
+  window.CoolieScripts.promo_product_id = {{ promo_product.variants[0].id | json }}
+  window.CoolieScripts.promo_product = {{ promo_product | json }}
+  window.CoolieScripts.promo_enabled = {{ settings.free_product_promo_enabled | json }}
+  window.CoolieScripts.promo_minimum = {{ settings.free_product_promo_minimum | json }} * 100 // in cents plz
+              
+  /* handles adding or removing the promo product from the cart based on pre-defined settings */
+  /* cart should be the Shopify cart object, callback is a function accepting the updated cart and a boolean indicating whether the promo ran */
+  window.CoolieScripts.ajaxHandlePromoProduct = function(cart, callback) {
+    var cart_has_product = false
+    var promo_item_count = 0
+    var cart_value = cart.total_price
+    var promo_product_id = window.CoolieScripts.promo_product_id
+    var promo_minimum = window.CoolieScripts.promo_minimum
+    var promo_enabled = window.CoolieScripts.promo_enabled
+    
+    if(!promo_enabled) return callback(cart, false);
+    
+    let promo_line_item = cart.items.find(item => item.variant_id === window.CoolieScripts.promo_product_id)
+    if (promo_line_item) {
+      cart_has_product = true
+      promo_item_count = promo_line_item.quantity
+    }
+        
+    if(cart_has_product && cart_value < promo_minimum) {
+      $.ajax({
+        method: 'POST',
+        url: '/cart/change.js',
+        data: {
+          quantity: 0,
+          id: promo_product_id
+        },
+        dataType: 'json',
+        statusCode: {
+          200: function(data, status) {
+            return callback(data, true)
+          }
+        }
+      });
+    } else if (cart_has_product && promo_item_count > 1) {
+      $.ajax({
+        method: 'POST',
+        url: '/cart/change.js',
+        data: {
+          quantity: 1,
+          id: promo_product_id
+        },
+        dataType: 'json',
+        statusCode: {
+          200: function(data, status) {
+            return callback(data, true)
+          }
+        }
+      });
+    } else if (!cart_has_product && cart_value >= promo_minimum) {
+      $.ajax({
+        method: 'POST',
+        url: '/cart/add.js',
+        data: {
+          quantity: 1,
+          id: promo_product_id
+        },
+        dataType: 'json',
+        statusCode: {
+          200: function(data, status) {
+            $.ajax({
+              method: 'GET',
+              url: '/cart.js',
+              dataType: 'json',
+              success: function(cart) {
+                return callback(cart, true)
+              }
+            })
+          }
+        }
+      });
+    } else callback(cart, false)
+  }
+})();
+</script>

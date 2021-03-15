@@ -1,0 +1,28 @@
+<div>
+ {% if section.settings.lookbook_maintext != blank %}
+  <div class="lookbook-main-text">{{ section.settings.lookbook_maintext }}</div>
+ {% endif %}
+  {% if section.settings.lookbook_subtext != blank %}
+  <div class="lookbook-sub-text">{{ section.settings.lookbook_subtext }}</div>
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "Lookbook Text",
+    "settings": [
+       {
+         "type": "richtext",  
+         "id": "lookbook_maintext",
+         "label": "Lookbook main text"
+       },
+       {
+         "type": "richtext",
+		 "id": "lookbook_subtext",
+         "label": "Lookbook sub text"
+       }
+    ]
+  }
+{% endschema %}
+
+

@@ -1,0 +1,153 @@
+<div id="shopping-cart" class="container">
+  <h1>My Cart</h1>
+  {% if cart.item_count == 0 %}
+  <p>Your Bag is currently empty.</p>
+  {% else %}
+  <script type="text/javascript">
+    function remove_item(id) {
+      document.getElementById('updates_'+id).value = 0;
+      document.getElementById('cartform').submit();
+    }
+  </script>
+  <form action="/cart" method="post" id="cartform">
+   <div class="cart-header">
+      <h2>Subtotal {{ cart.total_price | money_without_trailing_zeros }}</h2>
+      <a class="continue-shopping" href="/collections/new-arrivals">Continue Shopping</a>
+    </div>    
+    {% comment %} using a grid layout instead of a table for more control over the arrangement of elements here {% endcomment %}
+    <div class="cart-items">
+      <h3 class="column-header item-image">Product</h3>
+      <h3 class="column-header item-unit-price">Price</h3>
+      <h3 class="column-header item-quantity">Qty</h3>
+      <h3 class="column-header item-line-price">Total</h3>
+      {% for item in cart.items %}
+      {% comment %}2019/11 - fixed cart totals to match backend calculations{% endcomment %}
+      {% if tmp_saving %}
+      {% assign saving = tmp_saving | minus: item.variant.price | times: item.quantity %}
+      {% assign total_saving = saving | plus: total_saving %}
+      {% endif %}
+
+      {% assign orig_line_price = item.variant.compare_at_price | times: item.quantity %}
+      {% if item.original_line_price > orig_line_price %}
+      {% assign orig_line_price = item.original_line_price %}
+      {% endif %}
+      {% assign insuranceProduct = false %}
+      {% if item.product.id == 4351387172966 %}
+      {% assign insuranceProduct = true %}
+      {% endif %}
+
+      {% assign item_price = item.final_price %}
+      {% if insuranceProduct == false %}
+      {% assign item_price = item_price | divided_by: 100 | floor %}
+      {% assign item_price_remainder = item_price | modulo: 2 %}
+      {% assign item_price = item_price | minus: item_price_remainder | times: 100 %}
+      {% endif %}
+      {% assign item_line_price = item_price | times: item.quantity %}
+      {% assign cart_sub_total = cart_sub_total | plus: item_line_price %}
+      <div class="item-image">
+        <a href="{{ item.product.url }}" title="{{ item.product.title | escape }}">
+          {% assign found = false %}
+          {% for img in item.product.images %}
+          {% if found == false and item.variant.title contains img.alt %}
+          <img src="{{ img | product_img_url: '200x' }}"  alt="{{ item.alt | escape }}" />
+          {% assign found = true %}
+          {% endif %}
+          {% endfor %}
+          {% if found == false %}
+          <img src="{{ item.product.featured_image | product_img_url: '200x' }}"  alt="{{ item.product.featured_image.alt | escape }}" />
+          {% endif %}           
+        </a>
+      </div>
+      <div class="item-description">
+        <h3 class="item-product-title">{{ item.product.title }}</h3>
+        {% unless insuranceProduct == true %}
+        <span class="item-variant">Color: {{ item.variant.option1 }}</span>
+        <span class="item-variant">Size: {{ item.variant.option2 }}</span>
+        {% endunless %}
+        
+        {% assign isItemSoldout = false %}
+        {% for variant in item.product.variants %}
+          {% if variant.id == item.id and variant.available == false %}
+            {% assign isItemSoldout = true %}
+          {% endif %}
+        {% endfor %}
+        {% if isItemSoldout %}
+			<div class="notify-me-form">
+			  <h6>NOTIFY ME WHEN THIS PRODUCT IS AVAILABLE</h6>
+			  <div class="form-container">
+				<input data-product-id="{{ item.product.id }}" data-variant-id="{{ item.id }}" class="email-notify" type="email" placeholder="ENTER YOUR EMAIL ADDRESS" />
+				<button class="btn email-send">SEND</button>
+			  </div>
+			  <div class="bis-response"></div>
+              <div class="item-remove"><span onclick="remove_item({{ item.variant.id }}); return false;" data-id="{{ item.id }}">REMOVE</span></div>
+			</div>        
+        <span class="item-soldout">Sold out</span>        
+        {% endif %}
+      </div>      
+          <div class="item-unit-price">
+            <span class="final-price">{{ item.final_price | money_without_trailing_zeros }}</span>
+            {% if item.original_price > item.final_price %}
+            <span class="original-price">{{ item.original_price | money_without_trailing_zeros }}</span>
+            {% endif %}
+          </div>
+          <div class="item-quantity">
+            {% if insuranceProduct == false %}
+            <input type="text" class="cart-qty{% if isItemSoldout %} hidden{% endif %}" name="updates[{{ item.id }}]" id="updates_{{ item.variant.id }}" value="{{ item.quantity }}" onfocus="this.select();" />    
+            {% unless isItemSoldout %}
+            <input type="submit" name="update" class="cart-item-button cart-item-update" value="Update" />
+            {% endunless %}
+          	<a href="#" class="cart-item-button cart-item-remove" data-id="{{ item.variant.id }}" onclick="remove_item({{ item.variant.id }}); return false;">Remove</a>
+            {% else %}
+            <span class="insurance-qty">{{ item.quantity }}</span>
+            {% endif %}
+          </div>
+          <div class="item-line-price">
+            <p>{{ item.final_line_price | money_without_trailing_zeros }}</p>
+          </div>
+        {% endfor %}{% comment %} end of cart item loop {% endcomment %}
+    </div>
+    <div class="cart-footer">
+      <h1>Subtotal {{ cart.total_price | money_without_trailing_zeros }}</h1>
+
+      <div id="#sezzle-div"></div>
+      <!-- Route Code Edited 1/23/2020 -->
+      <!--<div class="route-div"></div>-->
+      <!-- End Route Code -->
+
+      <a class="continue-shopping" href="/collections/new-arrivals">Continue Shopping</a>
+
+      <input type="submit" name="checkout" id="checkout" value="CHECKOUT" class="button add_to_cart" />
+    </div>
+
+    {%comment%}
+      {% if additional_checkout_buttons %} 
+        <div style="" class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}
+        </div>
+      {% endif %}
+    {%endcomment%}
+
+
+  </form>
+  {% endif %}{% comment %} end of cart has items check {% endcomment %}
+</div>
+
+<!-- sezzle config -->
+<script>
+document.sezzleConfig = {
+    targetXPath: '#sezzle-div',
+    renderToPath: '.',
+    forcedShow: false,
+    alignment: 'center',
+    alignmentSwitchMinWidth: 1025,
+    alignmentSwitchType: 'center',
+    merchantID: '82394a65-a832-4262-a3aa-c8dd9c754709',
+    theme: 'light',
+    widthType: 'thin',
+    widgetType: 'cart',
+    minPrice: 0,
+    maxPrice: 100000,
+    imageUrl: 'https://d3svog4tlx445w.cloudfront.net/branding/sezzle-logos/png/sezzle-logo-all-black-sm-100w.png',
+    hideClasses: ['']
+  }
+</script>
+<script src="https://widget.sezzle.com/v1/javascript/price-widget?uuid=82394a65-a832-4262-a3aa-c8dd9c754709"></script>
